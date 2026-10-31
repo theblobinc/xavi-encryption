@@ -1,0 +1,208 @@
+{
+  "policy": {
+    "availability_is_discovered_at_runtime": true,
+    "host_specific_benchmarks_in_registry": false,
+    "registry_override_env": "XAVI_DUO_COMPUTE_REGISTRY"
+  },
+  "providers": [
+    {
+      "capabilities": [
+        "duo.native",
+        "boolean.ir",
+        "word.ir"
+      ],
+      "contains_client_secret": false,
+      "deployment_scope": "host-neutral",
+      "device": "portable",
+      "id": "native-wasm",
+      "kind": "wasm",
+      "remote_safe": true,
+      "status": "portable-interface"
+    },
+    {
+      "capabilities": [
+        "fhe.boolean",
+        "fhe.word64",
+        "fhe.keccak24",
+        "fhe.oblivious-select",
+        "fhe.secret-rotation"
+      ],
+      "contains_client_secret": true,
+      "deployment_scope": "host-neutral",
+      "device": "cpu",
+      "id": "tfhe-cpu-local",
+      "image": "localhost/xavi-void-tfhe-sidecar:1.2-dev5-cpu",
+      "image_id": "d7f0a228dbb2059097c1f83b48ffe006ddc4582e8925adefb1689d55d7f9e2b5",
+      "kind": "tfhe",
+      "remote_safe": false,
+      "status": "optional-provider"
+    },
+    {
+      "capabilities": [
+        "fhe.boolean",
+        "fhe.word64",
+        "fhe.keccak24",
+        "fhe.oblivious-select",
+        "fhe.secret-rotation"
+      ],
+      "contains_client_secret": false,
+      "deployment_scope": "host-neutral",
+      "device": "cpu",
+      "id": "tfhe-cpu-evaluator",
+      "image": "localhost/xavi-void-tfhe-split:1.2-dev5",
+      "image_id": "9ed4e073677be4f245e8a23111801f21702454ec0cf23175ca05a8e40e6f9c37",
+      "kind": "tfhe",
+      "remote_safe": true,
+      "status": "optional-provider"
+    },
+    {
+      "capabilities": [
+        "fhe.openfhe"
+      ],
+      "contains_client_secret": false,
+      "deployment_scope": "host-neutral",
+      "device": "cpu",
+      "id": "openfhe-cpu",
+      "image": "localhost/xavi-void-openfhe:1.2-dev5",
+      "image_id": "d0f4af3aabb843cf886d7212962af9a5f48992a08bf0513bca8a23b6df306924",
+      "kind": "openfhe",
+      "remote_safe": true,
+      "status": "optional-provider"
+    },
+    {
+      "accelerator_abi": "cuda",
+      "accelerator_profile": "nvidia-cdi-compute-v1",
+      "capabilities": [
+        "fhe.boolean",
+        "fhe.word64",
+        "fhe.keccak24",
+        "fhe.oblivious-select",
+        "fhe.secret-rotation",
+        "gpu.fhe"
+      ],
+      "contains_client_secret": false,
+      "deployment_scope": "host-neutral",
+      "device": "cuda",
+      "id": "tfhe-cuda-evaluator",
+      "image": "localhost/xavi-duo-tfhe-cuda-evaluator:0.5.0",
+      "image_id": "2ea9e686f6c3a8df005791247ab64115087a606efbaf046af6f9e0f05fe6152e",
+      "kind": "tfhe",
+      "remote_safe": true,
+      "runtime_user": "10001:999",
+      "sandbox": {
+        "cap_drop": "all",
+        "ephemeral_rootfs": true,
+        "network": "none",
+        "no_new_privileges": true,
+        "read_only_rootfs": true,
+        "read_only_rootfs_reason": null,
+        "server_key_mount": "ro",
+        "writable_injection_overlays": [
+          "/usr/lib/x86_64-linux-gnu",
+          "/etc"
+        ],
+        "writable_overlay_persistence": false
+      },
+      "status": "optional-provider"
+    },
+    {
+      "capabilities": [
+        "gpu.word64",
+        "word.ir"
+      ],
+      "contains_client_secret": false,
+      "deployment_scope": "host-neutral",
+      "device": "cuda",
+      "id": "cuda-word-sidecar",
+      "kind": "gpu-word",
+      "remote_safe": true,
+      "status": "optional-provider-build-required"
+    },
+    {
+      "batch_size": 16,
+      "capabilities": [
+        "fhe.vector.approx.client"
+      ],
+      "contains_client_secret": true,
+      "deployment_scope": "host-neutral",
+      "device": "cpu",
+      "id": "openfhe-ckks-client",
+      "image": "localhost/xavi-void-openfhe:1.2-dev5",
+      "image_id": "d0f4af3aabb843cf886d7212962af9a5f48992a08bf0513bca8a23b6df306924",
+      "kind": "openfhe-ckks",
+      "remote_safe": false,
+      "status": "optional-provider"
+    },
+    {
+      "batch_size": 16,
+      "capabilities": [
+        "fhe.vector.approx",
+        "fhe.vector.add",
+        "fhe.vector.mul",
+        "fhe.vector.scale",
+        "fhe.vector.dot"
+      ],
+      "contains_client_secret": false,
+      "deployment_scope": "host-neutral",
+      "device": "cpu",
+      "id": "openfhe-ckks-evaluator",
+      "image": "localhost/xavi-void-openfhe:1.2-dev5",
+      "image_id": "d0f4af3aabb843cf886d7212962af9a5f48992a08bf0513bca8a23b6df306924",
+      "kind": "openfhe-ckks",
+      "remote_safe": true,
+      "status": "optional-provider"
+    },
+    {
+      "batch_size": 16,
+      "capabilities": [
+        "fhe.vector.activation",
+        "fhe.vector.sigmoid",
+        "fhe.vector.tanh"
+      ],
+      "contains_client_secret": false,
+      "deployment_scope": "host-neutral",
+      "device": "cpu",
+      "id": "openfhe-ckks-activation-evaluator",
+      "image": "localhost/xavi-void-openfhe:1.2-dev5",
+      "image_id": "d0f4af3aabb843cf886d7212962af9a5f48992a08bf0513bca8a23b6df306924",
+      "kind": "openfhe-ckks",
+      "profile": {
+        "activation_domain": [
+          -2.0,
+          2.0
+        ],
+        "batch_size": 16,
+        "multiplicative_depth": 4
+      },
+      "remote_safe": true,
+      "status": "experimental-optional-provider"
+    },
+    {
+      "batch_size": 16,
+      "capabilities": [
+        "fhe.wg-rnn.recurrent",
+        "fhe.vector.activation",
+        "fhe.vector.approx"
+      ],
+      "contains_client_secret": false,
+      "deployment_scope": "host-neutral",
+      "device": "cpu",
+      "id": "openfhe-ckks-wg-rnn-evaluator",
+      "image": "localhost/xavi-void-openfhe:1.2-dev5",
+      "image_id": "d0f4af3aabb843cf886d7212962af9a5f48992a08bf0513bca8a23b6df306924",
+      "kind": "openfhe-ckks",
+      "profile": {
+        "activation_domain": [
+          -2.0,
+          2.0
+        ],
+        "batch_size": 16,
+        "multiplicative_depth": 10,
+        "scale_bits": 40
+      },
+      "remote_safe": true,
+      "status": "optional-provider"
+    }
+  ],
+  "schema": "XAVI-DUO/COMPUTE-PROVIDERS/v2"
+}

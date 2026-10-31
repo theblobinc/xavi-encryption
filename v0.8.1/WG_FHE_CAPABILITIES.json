@@ -1,0 +1,109 @@
+{
+  "authority": false,
+  "components": {
+    "wg-rnn": {
+      "note": "split CKKS covers packed dot/cosine, linear vector work, cubic sigmoid/tanh, and a tested depth-10 encrypted recurrent cell; approximation error is witness-tracked and trusted-client fallback remains available",
+      "operations": {
+        "cosine-similarity": {
+          "fallback": "trusted-client-local",
+          "preferred": "fhe.vector.approx"
+        },
+        "discrete-route-gate": {
+          "fallback": "trusted-client-local",
+          "preferred": "fhe.boolean"
+        },
+        "linear-vector-blend": {
+          "fallback": "trusted-client-local",
+          "preferred": "fhe.vector.approx"
+        },
+        "prediction-vector": {
+          "fallback": "trusted-client-local",
+          "preferred": "fhe.vector.approx"
+        },
+        "recurrent-vector-update": {
+          "fallback": "trusted-client-local",
+          "preferred": "fhe.wg-rnn.recurrent"
+        },
+        "sigmoid-gate": {
+          "fallback": "trusted-client-local",
+          "preferred": "fhe.vector.activation"
+        },
+        "tanh-gate": {
+          "experimental": true,
+          "fallback": "trusted-client-local",
+          "preferred": "fhe.vector.activation"
+        }
+      }
+    },
+    "wg-sfm": {
+      "operations": {
+        "commitment-keccak": {
+          "preferred": "fhe.keccak24"
+        },
+        "oblivious-register-select": {
+          "preferred": "fhe.oblivious-select"
+        },
+        "semantic-predicate": {
+          "preferred": "fhe.boolean"
+        },
+        "typed-selection": {
+          "preferred": "fhe.word64"
+        },
+        "witness-gate": {
+          "preferred": "fhe.boolean"
+        }
+      }
+    },
+    "wg-srnn": {
+      "operations": {
+        "arbitration": {
+          "preferred": "fhe.boolean"
+        },
+        "commitment-keccak": {
+          "preferred": "fhe.keccak24"
+        },
+        "reconsideration-state": {
+          "preferred": "fhe.word64"
+        },
+        "reflection-agenda-select": {
+          "preferred": "fhe.oblivious-select"
+        },
+        "release-gate": {
+          "preferred": "fhe.boolean"
+        },
+        "strategy-score-vector": {
+          "fallback": "trusted-client-local",
+          "preferred": "fhe.vector.approx"
+        }
+      }
+    }
+  },
+  "known_value_optimization": "client-known plaintext constants may be constant-folded or select deterministic equivalent circuits before encryption; cryptographic secret keys are never planner inputs",
+  "learning_feedback_allowed": [
+    "provider_id",
+    "provider_image_id",
+    "public_key_id",
+    "evaluation_key_id",
+    "device",
+    "wall_time_ns",
+    "operation_counts",
+    "bootstrap_counts",
+    "circuit_depth",
+    "ciphertext_bytes",
+    "resident_bytes",
+    "cache_hits",
+    "queue_latency_ms",
+    "witness_outcome",
+    "semantic_equivalence_id"
+  ],
+  "learning_feedback_forbidden": [
+    "client_key_bytes",
+    "private_key_bytes",
+    "wrapping_key_bytes",
+    "tpm_unsealed_secret",
+    "raw_decryption_secret",
+    "authority_token"
+  ],
+  "schema": "XAVI-DUO/WG-FHE-CAPABILITIES/v1",
+  "trust_domain": "wg-rnn/wg-sfm/wg-srnn-client"
+}

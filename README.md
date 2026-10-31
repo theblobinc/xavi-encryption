@@ -1,162 +1,89 @@
-# XAVI-DUO Encryption
+# XAVI-DUO Encryption (`xavi-encrypt`)
 
-**Standalone authenticated encryption, post-quantum transport, key custody, and encrypted-compute framework built around XDE2/XDE2-PQ2 and DUO-Math.**
+Standalone authenticated encryption, post-quantum transport, key custody, and encrypted-compute tooling built around **XDE2 / XDE2-PQ2** with **DUO Numbers Rev009** as a reversible authenticated wire representation.
 
-XAVI-DUO Encryption is a portable security framework for protecting data and authenticated compute workloads across local, remote, hardware-backed, and encrypted-compute environments. It combines standard cryptographic primitives with typed custody, signed admission, replay protection, immutable provider identity, and a DUO-Math representation layer.
-
-> **Current status:** v0.8.0 is an experimental high-assurance implementation that has passed the project's internal validation and reproducible-build gates. It has **not** been independently audited, accredited, or FIPS-validated, and its organizational ML-DSA-87 release-root signature is still pending.
+> **Security status:** experimental high-assurance implementation. Internally validated and reproducibly built, but **not independently audited, FIPS-validated as a deployment, accredited for classified systems, or certified as military-grade**.
 
 ## What it provides
 
-- **XDE2 authenticated encryption** using ChaCha20-Poly1305 with HKDF-SHA256 key separation.
-- **XDE2-PQ2 post-quantum recipient transport** using ML-KEM-1024.
-- **ML-DSA authenticated identity and admission**, with ML-DSA-87 used for high-assurance identity and release-attestation paths.
-- **Typed private-key custody** for `file://`, `tpm2://`, `pkcs11://`, `authority://`, and `remote://` backends.
-- **Non-exporting private operations** for high-assurance signing and decapsulation.
-- **Replay and nonce rollback protection**, including support for independent monotonic rollback-domain anchors.
-- **Encrypted-compute integration** for FHE, Worker/WASM, OCI and native providers, with immutable provider identities and bounded execution policy.
-- **Vendor-neutral accelerator policy** for GPU and other compute backends.
-- **Evidence and witness records** that bind cryptographic, execution, provider, and policy state without granting authority themselves.
-- **DUO-Math Rev009 wire representation**, used as an authenticated polymorphic representation layer rather than as a replacement for standard cryptography.
+- **XDE2 symmetric encryption** — ChaCha20-Poly1305 with HKDF-SHA256 key separation, durable nonce chronology, authenticated receipts, privacy padding, and zero-free DUO wire encoding.
+- **XDE2-PQ2 post-quantum transport** — ML-KEM-1024 recipient key establishment with explicit actual-key parameter binding and fail-closed provider identity.
+- **High-assurance identity/signing** — ML-DSA-87 with actual-key algorithm binding.
+- **Key custody** — software-file development mode plus generic non-exporting `remote://`, `tpm2://`, and `pkcs11://` private-operation boundaries.
+- **Remote execution admission** — signed project-scoped approvals, bounded envelopes, capability/provider binding, and claim-bound two-phase replay anchoring.
+- **Encrypted compute** — split trusted-client / secret-blind evaluator paths for TFHE, CKKS/OpenFHE, WASM/Worker execution, and optional accelerator providers.
+- **Standalone operation** — production code does not require the Xavi cluster, MCP, prod3/prod4, NFS, private Xavi hostnames, or Xavi authority services. Xavi infrastructure is validation/reference-lab evidence only.
 
-## Security boundary
+DUO-Math is **not** treated as a replacement for standard cryptography or as extra entropy. The cryptographic security boundary remains the standard AEAD, KEM, and signature primitives; DUO provides the authenticated reversible polymorphic representation.
 
-XAVI-DUO does **not** rely on DUO-Math representation ambiguity for confidentiality or integrity.
+## Current release — v0.8.1
 
-The cryptographic boundary is provided by established primitives and explicit policy controls:
+`v0.8.1/` is the current canonical standalone revision. It carries forward v0.8.0 and adds:
 
-```text
-ChaCha20-Poly1305       authenticated symmetric encryption
-HKDF-SHA256             key separation and derivation
-ML-KEM-1024             post-quantum key establishment
-ML-DSA-87               high-assurance signatures and identity
-FHE providers           encrypted computation where configured
-Custody + policy        private-key and execution authority boundaries
-DUO-Math Rev009         authenticated polymorphic wire representation
-```
+- repaired CLI receipt generation/verification paths with subprocess regression coverage;
+- crash-recoverable two-phase replay anchoring and rollback quarantine;
+- no-follow/fstat hardening for sensitive local key/nonce state;
+- actual ML-KEM parameter-set binding;
+- stricter XDE2 frame inspection;
+- corrected XDE2/Rev009 protocol documentation;
+- exact Python build-backend pins and reproducible no-isolation release builds;
+- repository CI for portable security tests and wheel smoke validation.
 
-See [`v0.8.0/SECURITY.md`](v0.8.0/SECURITY.md) and [`v0.8.0/THREAT_MODEL.md`](v0.8.0/THREAT_MODEL.md) for the version-specific security model.
-
-## Standalone by design
-
-The product does **not** require the Xavi cluster, MCP, private DNS, prod3/prod4, NFS, or any fixed internal infrastructure.
-
-The Xavi environment is used as a validation lab. Cluster-specific evidence is isolated under versioned `validation/` directories and is not a runtime dependency.
-
-Portable deployments can use local files, TPM2, PKCS#11/HSMs, HTTPS/mTLS custody services, native providers, OCI providers, sockets, or remote transports according to deployment policy.
-
-## Current release — v0.8.0
-
-`v0.8.0/` is the first canonical standalone release in this repository.
-
-Release state:
-
-```text
-PASS_INTERNAL_VALIDATION_REPRODUCIBLE_SIGNATURE_PENDING
-```
-
-The release preserves:
-
-- the complete standalone source tree;
-- deterministic source archive and Python wheel;
-- release manifest and artifact hashes;
-- reproducibility evidence;
-- internal security/test gate results;
-- release-signing request and custody-discovery evidence.
-
-The frozen release artifacts live under [`v0.8.0/release/`](v0.8.0/release/).
-
-## Repository model
-
-Every published revision is a **self-contained version directory**:
-
-```text
-xavi-encryption/
-├── v0.8.0/
-├── v0.9.0/        # future revision
-├── v1.0.0/        # future revision
-├── VERSION_INDEX.json
-├── CHANGELOG.md
-└── tools/
-```
-
-A later version must contain everything required to understand, build, test, and audit that revision without depending on an earlier version directory. Released/tagged version directories are immutable historical snapshots; corrections belong in a later revision.
-
-See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the versioning rules.
+Validation for this release: **82/82 Python**, **37/37 Node/WASM/FHE**, and **33/33 portable security-core** tests. Two independent release builds produced byte-identical source archives, wheels, and release manifests. Organizational ML-DSA-87 release signing remains pending until a configured non-exporting release root is available.
 
 ## Quick start
 
-From the current release source:
-
 ```bash
-cd v0.8.0
+cd v0.8.1
 python3 -m pip install .
 
-xavi-duo self-test
-xavi-duo provider-status
-```
-
-For symmetric XDE2 usage:
-
-```bash
 xavi-duo keygen --out alice.xdek
-printf 'hello XAVI-DUO\n' > plain.txt
-
-xavi-duo encrypt \
-  --key alice.xdek \
-  --in plain.txt \
-  --out secret.xde \
-  --aad 'example:v1'
-
-xavi-duo decrypt \
-  --key alice.xdek \
-  --in secret.xde \
-  --out recovered.txt \
-  --aad 'example:v1'
+printf 'hello DUO\n' > plain.txt
+xavi-duo encrypt --key alice.xdek --in plain.txt --out secret.xde \
+  --receipt secret.receipt.json --aad 'example:v1' --pad-to 1024
+xavi-duo verify-receipt --key alice.xdek --frame secret.xde \
+  --receipt secret.receipt.json --aad 'example:v1'
+xavi-duo decrypt --key alice.xdek --in secret.xde --out recovered.txt \
+  --receipt secret.receipt.json --aad 'example:v1'
+cmp plain.txt recovered.txt
 ```
 
-Post-quantum transport, custody-backed operations, remote execution, FHE and accelerator-backed paths require the corresponding provider/runtime configuration documented inside the version directory.
+For the threat model, custody requirements, PQ provider boundary, remote execution, and encrypted-compute design, start with `v0.8.1/README.md`, `v0.8.1/SECURITY.md`, `v0.8.1/THREAT_MODEL.md`, `v0.8.1/HIGH_ASSURANCE_PROFILE.json`, and `v0.8.1/PROTOCOL.md`.
 
-## Validation
+## Versioned repository model
 
-Verify the repository's frozen release artifacts:
+Every published revision is a **self-contained root-level version directory**. A reader does not need an earlier revision to build, test, or audit a later one. Released/tagged version directories are immutable; corrections and new work go into a new version directory.
+
+```text
+xavi-encrypt/
+├── v0.8.0/        # frozen first canonical release
+├── v0.8.1/        # current hardened release
+├── VERSION_INDEX.json
+├── CHANGELOG.md
+└── tools/verify_repository.py
+```
+
+Repository integrity check:
 
 ```bash
 python3 tools/verify_repository.py
 ```
 
-Run the version test suite:
+Version test suite:
 
 ```bash
-cd v0.8.0
-make test
+cd v0.8.1
+python3 -m unittest discover -s tests -p 'test_*.py' -v
 ```
 
-Some provider, hardware-custody, FHE, accelerator and remote-execution tests require the corresponding runtime or hardware environment.
+Some PQ-provider, FHE, hardware-custody, and accelerator tests require the corresponding container/runtime/hardware environment documented by the version.
 
 ## Release verification
 
-High-assurance consumers should verify a detached ML-DSA-87 release attestation using a release public key obtained through an independent trusted channel, then verify the release manifest and artifact hashes.
+Each canonical version preserves its source archive, wheel, release manifest, reproducibility proof, artifact hash list, signing request, and custody-discovery record under `vX.Y.Z/release/`. `VERSION_INDEX.json` binds their SHA-256 digests.
 
-The v0.8.0 internal release proof is reproducible, but the organizational non-exporting ML-DSA-87 release-root signature is currently pending. Do not represent v0.8.0 as independently audited, accredited, FIPS validated, classified-system approved, or "military grade."
-
-## Documentation
-
-Start with:
-
-- [`v0.8.0/README.md`](v0.8.0/README.md) — release documentation and usage
-- [`v0.8.0/SECURITY.md`](v0.8.0/SECURITY.md) — security boundary and assurance model
-- [`v0.8.0/THREAT_MODEL.md`](v0.8.0/THREAT_MODEL.md) — threat model
-- [`v0.8.0/PROTOCOL.md`](v0.8.0/PROTOCOL.md) — protocol definitions
-- [`v0.8.0/CUSTODY.md`](v0.8.0/CUSTODY.md) — custody model
-- [`v0.8.0/FHE_EXECUTION.md`](v0.8.0/FHE_EXECUTION.md) — encrypted-compute plane
-- [`v0.8.0/STANDALONE_DEPLOYMENT.md`](v0.8.0/STANDALONE_DEPLOYMENT.md) — portable deployment model
+The v0.8.1 release intentionally has **no detached release signature yet**: high-assurance release signing requires ML-DSA-87 through a non-exporting custody operator. An exportable file key is not substituted merely to make the status look green.
 
 ## Licensing
 
-XAVI-DUO Encryption is dual-licensed under:
-
-- **MIT License**
-- **Apache License 2.0**
-
-Unless a component explicitly states otherwise, you may use either license. See [`LICENSE-MIT`](LICENSE-MIT) and [`LICENSE-APACHE`](LICENSE-APACHE).
+Unless a component explicitly states otherwise, this repository is dual-licensed under **MIT OR Apache-2.0**. See `LICENSE-MIT` and `LICENSE-APACHE`.

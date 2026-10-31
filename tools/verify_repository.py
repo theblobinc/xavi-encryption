@@ -30,14 +30,15 @@ for entry in INDEX["versions"]:
         if actual not in {version, version.removeprefix("v")}:
             errors.append(f"{version}: VERSION contains {actual!r}")
 
+    release_date = entry["date"]
     checks = [
         (entry["source_archive"]["path"], entry["source_archive"]["sha256"]),
         (entry["wheel"]["path"], entry["wheel"]["sha256"]),
-        (f"{entry['path']}/release/XAVI_DUO_Encryption_{version}_2026-10-30.RELEASE.json", entry["release_manifest_sha256"]),
-        (f"{entry['path']}/release/XAVI_DUO_Encryption_{version}_2026-10-30.RELEASE-PROOF.json", entry["release_proof_sha256"]),
-        (f"{entry['path']}/release/XAVI_DUO_Encryption_{version}_2026-10-30.ARTIFACTS.sha256", entry["artifact_list_sha256"]),
-        (f"{entry['path']}/release/XAVI_DUO_Encryption_{version}_2026-10-30.SIGNING-REQUEST.json", entry["signing_request_sha256"]),
-        (f"{entry['path']}/release/XAVI_DUO_Encryption_{version}_2026-10-30.CUSTODY-DISCOVERY.json", entry["custody_discovery_sha256"]),
+        (f"{entry['path']}/release/XAVI_DUO_Encryption_{version}_{release_date}.RELEASE.json", entry["release_manifest_sha256"]),
+        (f"{entry['path']}/release/XAVI_DUO_Encryption_{version}_{release_date}.RELEASE-PROOF.json", entry["release_proof_sha256"]),
+        (f"{entry['path']}/release/XAVI_DUO_Encryption_{version}_{release_date}.ARTIFACTS.sha256", entry["artifact_list_sha256"]),
+        (f"{entry['path']}/release/XAVI_DUO_Encryption_{version}_{release_date}.SIGNING-REQUEST.json", entry["signing_request_sha256"]),
+        (f"{entry['path']}/release/XAVI_DUO_Encryption_{version}_{release_date}.CUSTODY-DISCOVERY.json", entry["custody_discovery_sha256"]),
     ]
     for rel, expected in checks:
         path = ROOT / rel

@@ -1,0 +1,17 @@
+{
+  "schema": "XAVI-DUO/XDE2-TEST-VECTOR/v1",
+  "master_key_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+  "nonce_hex": "000102030405060708090a0b",
+  "aad_utf8": "XDE2 test vector",
+  "plaintext_hex": "4869",
+  "frame": "XDE2|1.2.3.4.5.6.7.8.9.1A.2A.3A|8CBBifiejfdejjagbi.7BJBDieaafhjddfghgg.1JGDadeichdbjgacjjh.3EGHaeedgbfggehgdih.3HJHhfcjabgdegedda.8JFIifdghfgcjiaigh.9GEgccgfdbjdbcfjc.3DDDcagjgdibefadac.4EFbeagjhbfbfjgce.3ADEHabafijghegfbej.1DJAGcaijaeejjjieb.8BDIHgaiehidehbgfj.4DGECheaahafdicicjd.2HIDbjbegcbfbijfic.1BJGcjeefhidfiagaaa.4CDBCdhjjaedcgfadgi.7GCIbdheafcefadhif.7GDdaicddgjehihbj.8AIFCaedhbjfiigdbejb.1ECaiefddjcbcehjcg.6BDCHfegbicbejdijea.6ACFHdcdeibddbcfdhb.1AEBEidjjjhahcjfbdf.1ABCCbahbidibehijfdh.4AJGEjjjidbehcjghea.3ADEdijegaaghcbfgff.3CGEAiejgefhgdedafg.4Cgiijghbajifeeh.9HBGbgcbddbachbaeea.8GBIcacfdebahififa",
+  "frame_sha256": "0f7d9984f52c4658144e19c9ff3df0f24ae5f2d57ebb7dd89e87e924200641f9",
+  "info": {
+    "magic": "XDE2",
+    "nonce_bytes": 12,
+    "payload_cells": 30,
+    "encrypted_payload_bytes": 14,
+    "ascii_zero_free": true,
+    "duo_cell_grammar_ok": true
+  }
+}

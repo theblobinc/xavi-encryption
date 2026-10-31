@@ -1,0 +1,56 @@
+{
+  "authority": false,
+  "claims": {
+    "classified_system_accreditation": false,
+    "fips_validated_deployment": false,
+    "independent_audit": false,
+    "military_grade": false
+  },
+  "closed_defects": [
+    "CLI receipt paths import and execute duo_context_commitment",
+    "remote replay anchor validates local order before external prepare and recovers crash-before-local-commit without replay acceptance",
+    "completed external replay claims detected after local rollback quarantine the session",
+    "sensitive XDE key/nonce state rejects final-component symlinks via no-follow/fstat or bounded hardened reads",
+    "ML-KEM operations bind the requested parameter set to the actual key object",
+    "frame_info rejects non-XDE2 magic",
+    "protocol documentation matches XDE2 HKDF/AAD domains and Rev009 grammar",
+    "Python build backend is exactly pinned and release builder disables mutable build isolation"
+  ],
+  "date": "2026-10-31",
+  "project": "XAVI-DUO Encryption",
+  "protocol": {
+    "duo_grammar": "[1-9][A-J]*[a-j]*",
+    "duo_revision": "009",
+    "legacy_compatibility": false,
+    "post_quantum": "XDE2-PQ2",
+    "symmetric": "XDE2"
+  },
+  "release_signature": {
+    "algorithm_required": "ML-DSA-87",
+    "status": "PENDING_NON_EXPORTING_RELEASE_ROOT"
+  },
+  "schema": "XAVI-DUO/RELEASE-GATE/v2",
+  "status": "PASS_INTERNAL_VALIDATION_RELEASE_SIGNATURE_PENDING",
+  "tests": {
+    "new_v081_security_regressions": {
+      "cli_receipt_roundtrip_tamper": 1,
+      "frame_info_wrong_magic": 1,
+      "mlkem_actual_parameter_binding": 1,
+      "replay_two_phase_anchor": 7,
+      "secure_file_symlink_rejection": 3
+    },
+    "node_wasm_fhe": {
+      "failed": 0,
+      "passed": 37
+    },
+    "portable_security_core": {
+      "failed": 0,
+      "passed": 33
+    },
+    "python_unittest": {
+      "failed": 0,
+      "passed": 82
+    }
+  },
+  "version": "0.8.1"
+}

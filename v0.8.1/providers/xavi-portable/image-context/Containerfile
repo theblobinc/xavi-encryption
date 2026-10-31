@@ -1,0 +1,10 @@
+FROM localhost/xavi-memory:learned-core-self-managed-20261027h
+USER 0
+WORKDIR /app
+COPY xavi_duo_crypto.py /app/xavi_duo_crypto.py
+COPY vendor/duo_core.py /app/vendor/duo_core.py
+COPY polymorphic-task.py /app/polymorphic-task.py
+COPY runner.py /app/runner.py
+RUN chmod 0555 /app/polymorphic-task.py /app/runner.py && chmod 0444 /app/xavi_duo_crypto.py /app/vendor/duo_core.py
+USER 10001:10001
+ENTRYPOINT ["python","/app/runner.py"]

@@ -1,0 +1,92 @@
+{
+  "artifacts": {
+    "XAVI_DUO_Encryption_v0.8.1_2026-10-31.RELEASE.json": {
+      "bytes": 952,
+      "sha256": "313c56bc6b0f1c3cff3ee19b19dab0cf1654a61e3867ab190e50994830a058a8"
+    },
+    "XAVI_DUO_Encryption_v0.8.1_2026-10-31.tar.gz": {
+      "bytes": 3895345,
+      "sha256": "95dcdddf8c58fd60483f676af98aba9f91e3f403517aa7a294f7948ba9d6aca6"
+    },
+    "xavi_duo_encryption-0.8.1-py3-none-any.whl": {
+      "bytes": 75189,
+      "sha256": "7ef92eb7237188d7ed08b087fc333decd790a91a4950fc3412cf0d9221df7f6e"
+    }
+  },
+  "authority": false,
+  "claims": {
+    "classified_system_accreditation": false,
+    "fips_validated_deployment": false,
+    "independently_audited": false,
+    "military_grade": false
+  },
+  "independent_readback": {
+    "archive_SHA256SUMS": "PASS",
+    "installed_wheel_self_test": "PASS",
+    "manifest_artifact_binding": "PASS",
+    "wheel_compiled_cache_entries": 0
+  },
+  "project": "XAVI-DUO Encryption",
+  "protocol": {
+    "duo_math": "DUO Numbers Rev009",
+    "grammar": "[1-9][A-J]*[a-j]*",
+    "legacy_compatibility": false,
+    "post_quantum": "XDE2-PQ2",
+    "symmetric": "XDE2"
+  },
+  "release_date": "2026-10-31",
+  "release_signature": {
+    "reason": "No configured non-exporting TPM2, PKCS#11, or remote release-signing operator was used. Exportable file-key signing is deliberately not substituted for the high-assurance release claim.",
+    "required_algorithm": "ML-DSA-87",
+    "status": "PENDING_NON_EXPORTING_RELEASE_ROOT"
+  },
+  "reproducibility": {
+    "archive_regular_file_count": 400,
+    "build_backend": {
+      "build_isolation": false,
+      "setuptools": "68.1.2",
+      "wheel": "0.42.0"
+    },
+    "generated_release_directory_excluded_from_source_allowlist": true,
+    "independent_builds": 2,
+    "release_manifest_byte_identical": true,
+    "source_archive_byte_identical": true,
+    "source_file_count_excluding_SHA256SUMS": 399,
+    "source_tree_sha256": "sha256:f00ae5c384b7c688fd86968d563637b8203a127e84c2ab8a9254596fab340fe6",
+    "wheel_byte_identical": true
+  },
+  "schema": "XAVI-DUO/RELEASE-PROOF/v1",
+  "security_closures": {
+    "cli_receipt_regression": "PASS",
+    "frame_info_magic_validation": "PASS",
+    "mldsa_actual_parameter_binding": "PASS",
+    "mlkem_actual_parameter_binding": "PASS",
+    "release_directory_self_inclusion": "PASS",
+    "replay_anchor_two_phase_crash_recovery": "PASS",
+    "replay_snapshot_rollback_quarantine": "PASS",
+    "sensitive_file_final_symlink_rejection": "PASS"
+  },
+  "status": "PASS_INTERNAL_VALIDATION_REPRODUCIBLE_SIGNATURE_PENDING",
+  "tests": {
+    "node_wasm_fhe": {
+      "pass": 37,
+      "total": 37
+    },
+    "portable_security_core": {
+      "pass": 33,
+      "total": 33
+    },
+    "python": {
+      "pass": 82,
+      "total": 82
+    },
+    "v081_security_regressions": {
+      "cli_receipt_roundtrip_tamper": 1,
+      "frame_info_wrong_magic": 1,
+      "mlkem_actual_parameter_binding": 1,
+      "replay_two_phase_anchor": 7,
+      "secure_file_symlink_rejection": 3
+    }
+  },
+  "version": "0.8.1"
+}

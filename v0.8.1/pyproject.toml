@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools==68.1.2", "wheel==0.42.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "xavi-duo-encryption"
+version = "0.8.1"
+description = "XAVI-DUO authenticated encryption, PQ transport, custody and encrypted-compute execution fabric"
+requires-python = ">=3.11"
+dependencies = ["cryptography>=41.0.0,<46"]
+license = {text = "MIT OR Apache-2.0"}
+
+[project.scripts]
+xavi-duo = "xavi_duo:main"
+xavi-duo-worker = "xavi_duo_remote_worker:main"
+xavi-duo-remote-worker = "xavi_duo_remote_worker:main"
+xavi-duo-release = "xavi_duo_release:main"
+
+[tool.setuptools]
+py-modules = ['mlkem_provider', 'pqc_provider', 'xavi_duo', 'xavi_duo_accelerator', 'xavi_duo_authority_custody', 'xavi_duo_compute', 'xavi_duo_crypto', 'xavi_duo_custody', 'xavi_duo_evidence', 'xavi_duo_fs', 'xavi_duo_identity', 'xavi_duo_nonce_anchor', 'xavi_duo_pq', 'xavi_duo_private_ops', 'xavi_duo_provider_runtime', 'xavi_duo_remote_admission', 'xavi_duo_replay_anchor', 'xavi_duo_remote_worker', 'xavi_duo_release', 'xavi_duo_replay', 'xavi_duo_software_custody', 'xavi_duo_transport', 'xavi_duo_trust', 'xavi_duo_witness_bridge']
+packages = ["vendor", "xavi_duo_data"]
+include-package-data = true
+
+[tool.setuptools.package-data]
+xavi_duo_data = ["*.json"]

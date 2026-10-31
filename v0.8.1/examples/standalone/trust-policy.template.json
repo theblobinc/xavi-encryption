@@ -1,0 +1,32 @@
+{
+  "schema": "XAVI-DUO/TRUST-POLICY/v1",
+  "project_id": "replace-project-id",
+  "policy_id": "replace-policy-version",
+  "senders": {
+    "sha256:REPLACE_SENDER_PUBLIC_KEY_ID": {
+      "enabled": true,
+      "public_key": "keys/sender.pub.pem",
+      "capabilities": ["fhe.boolean"],
+      "operations": ["sfm-witness-gate"],
+      "providers": ["tfhe-cuda-evaluator"]
+    }
+  },
+  "authorities": {
+    "sha256:REPLACE_AUTHORITY_PUBLIC_KEY_ID": {
+      "enabled": true,
+      "public_key": "keys/authority.pub.pem",
+      "capabilities": ["fhe.boolean"],
+      "operations": ["sfm-witness-gate"],
+      "providers": ["tfhe-cuda-evaluator"],
+      "workers": ["worker-a"]
+    }
+  },
+  "workers": {
+    "worker-a": {
+      "enabled": true,
+      "public_key": "keys/worker.pub.pem",
+      "private_key": "keys/worker.pem",
+      "providers": ["tfhe-cuda-evaluator"]
+    }
+  }
+}

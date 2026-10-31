@@ -1,0 +1,2 @@
+# Production-tested Python dependency baseline for v0.8.1
+cryptography==41.0.7

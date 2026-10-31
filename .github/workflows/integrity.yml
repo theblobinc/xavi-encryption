@@ -8,7 +8,7 @@ permissions:
   contents: read
 
 jobs:
-  verify:
+  repository-integrity:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -17,3 +17,52 @@ jobs:
           python-version: '3.12'
       - name: Verify versioned release artifacts
         run: python3 tools/verify_repository.py
+
+  portable-security-core:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install runtime dependency
+        run: python3 -m pip install cryptography==41.0.7
+      - name: Run portable cryptographic and state-security tests
+        working-directory: v0.8.1
+        run: |
+          python3 -m unittest -v \
+            tests.test_xde2 \
+            tests.test_nonce_anchor \
+            tests.test_replay_anchor \
+            tests.test_secure_file_state_v081 \
+            tests.test_cli_receipts \
+            tests.test_resource_limits_v08 \
+            tests.test_transport
+      - name: Run portable JavaScript policy tests
+        working-directory: v0.8.1
+        run: |
+          node --test --test-concurrency=1 \
+            tests/accelerator-registry.test.mjs \
+            tests/accelerator-wg-learning.test.mjs \
+            tests/compute-broker.test.mjs \
+            tests/encrypted-execution-task.test.mjs \
+            tests/standalone-js-portability.test.mjs \
+            tests/word64-wire.test.mjs \
+            tests/xavi-portable.test.mjs
+
+  package-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned build/runtime toolchain
+        run: python3 -m pip install setuptools==68.1.2 wheel==0.42.0 cryptography==41.0.7
+      - name: Build wheel without mutable build isolation
+        working-directory: v0.8.1
+        run: python3 -m pip wheel --no-deps --no-build-isolation . -w /tmp/xavi-duo-wheel
+      - name: Install wheel and run symmetric self-test
+        run: |
+          python3 -m pip install --force-reinstall --no-deps /tmp/xavi-duo-wheel/xavi_duo_encryption-0.8.1-py3-none-any.whl
+          xavi-duo self-test
