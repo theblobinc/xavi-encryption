@@ -1,0 +1,82 @@
+{
+  "artifacts": {
+    "XAVI_DUO_Encryption_v0.8.0_2026-10-30.RELEASE.json": {
+      "bytes": 952,
+      "sha256": "78436f5646f4d44094044c0dbaeb7fb896a9958d8337b749866727a0695a2949"
+    },
+    "XAVI_DUO_Encryption_v0.8.0_2026-10-30.tar.gz": {
+      "bytes": 3887569,
+      "sha256": "6c83d374fc83645fe53582beba4172b5c8172d257bbe887cb7889b5627abdafc"
+    },
+    "xavi_duo_encryption-0.8.0-py3-none-any.whl": {
+      "bytes": 70586,
+      "sha256": "67bd4daa4bced4e763b8c8109039e7c73c38e83997a065fbdee0012ef7508121"
+    }
+  },
+  "authority": false,
+  "claims": {
+    "classified_system_accreditation": false,
+    "fips_validated_deployment": false,
+    "independently_audited": false,
+    "military_grade": false
+  },
+  "duo_numbers_rev009": {
+    "archive_sha256": "d818dde2c983a9733d39ec95774e396b2bbe119b1927d416b66e37c518d8b9d7",
+    "corpus_checksums": "16/16",
+    "oracle_mismatches": 0,
+    "oracle_table_cells_checked": 10000
+  },
+  "independent_readback": {
+    "archive_SHA256SUMS": "PASS",
+    "installed_release_cli": "PASS",
+    "installed_wheel_self_test": "PASS",
+    "manifest_artifact_binding": "PASS",
+    "wheel_dependency_metadata": "PASS"
+  },
+  "project": "XAVI-DUO Encryption",
+  "protocol": {
+    "duo_math": "DUO Numbers Rev009",
+    "grammar": "[1-9][A-J]*[a-j]*",
+    "legacy_compatibility": false,
+    "post_quantum": "XDE2-PQ2",
+    "symmetric": "XDE2"
+  },
+  "release_date": "2026-10-30",
+  "release_signature": {
+    "reason": "No TPM2/PKCS11/remote-authority release-signing operator is currently configured on the build host. File-key signing was deliberately not used for the high-assurance release claim.",
+    "required_algorithm": "ML-DSA-87",
+    "status": "PENDING_NON_EXPORTING_RELEASE_ROOT"
+  },
+  "reproducibility": {
+    "archive_regular_file_count": 397,
+    "independent_builds": 2,
+    "release_manifest_byte_identical": true,
+    "source_archive_byte_identical": true,
+    "source_file_count_excluding_SHA256SUMS": 396,
+    "source_tree_sha256": "sha256:8d3e40ab0bb6465b385950d70387ac747e742d87323a1209c8ba7bea7e0fd9bf",
+    "wheel_byte_identical": true
+  },
+  "schema": "XAVI-DUO/RELEASE-PROOF/v1",
+  "status": "PASS_INTERNAL_VALIDATION_REPRODUCIBLE_SIGNATURE_PENDING",
+  "tests": {
+    "duo_native_successor_grid": "150x750",
+    "duo_rev009_js": {
+      "pass": 5,
+      "total": 5
+    },
+    "duo_rev009_python": "PASS",
+    "focused_security": {
+      "pass": 49,
+      "total": 49
+    },
+    "node_wasm_fhe": {
+      "pass": 37,
+      "total": 37
+    },
+    "python": {
+      "pass": 71,
+      "total": 71
+    }
+  },
+  "version": "0.8.0"
+}

@@ -1,0 +1,39 @@
+{
+  "authority": false,
+  "build_host": {
+    "host_mldsa_provider_present": false,
+    "host_openssl": "3.0.13",
+    "node": "tbi-production-4",
+    "tpm_device_present": false
+  },
+  "candidate_custody_host": {
+    "access_reason": "device owned by tss; privileged TPM capability read pending human/OIDC approval",
+    "node": "tbi-production-3",
+    "private_address": "10.77.0.2",
+    "provider_image": "localhost/xavi-duo-mlkem:openssl-3.5",
+    "provider_image_id": "994c36c66732b7ac2333e658b9ac3dc0b16acf90fa546c72fa6c0601f3066a68",
+    "service_identity": "tbi",
+    "service_identity_tpm_access": false,
+    "tpm2_tooling_present": true,
+    "tpm_devices": [
+      "/dev/tpm0",
+      "/dev/tpmrm0"
+    ]
+  },
+  "pending_approval": {
+    "challenge": "14915ab5f3334e2ff7f40a5fef255c30c1b1218246397e78a36335818c63904f",
+    "operation": "sudo tpm2_getcap properties-fixed",
+    "state": "pending"
+  },
+  "project": "XAVI-DUO Encryption",
+  "schema": "XAVI-DUO/RELEASE-CUSTODY-DISCOVERY/v1",
+  "signing_request": "XAVI_DUO_Encryption_v0.8.0_2026-10-30.SIGNING-REQUEST.json",
+  "signing_request_sha256": "sha256:6dec1a6e7fc233e7af628623528e4b3b30aa5d45c190bd99500c6479d90b15d4",
+  "status": "CUSTODY_HOST_DISCOVERED_TPM_ACCESS_PENDING",
+  "tpm_semantics": {
+    "hardware_bound_claim": "NOT_YET_ESTABLISHED",
+    "intended_role": "hardware-protect release-root custody material / signer boundary; ML-DSA-87 remains OpenSSL 3.5 provider operation",
+    "native_mldsa87": false
+  },
+  "version": "0.8.0"
+}

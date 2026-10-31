@@ -1,0 +1,86 @@
+{
+  "claims": {
+    "accredited_for_classified_use": false,
+    "fips_validated_deployment": false,
+    "independently_audited": false,
+    "military_grade": false
+  },
+  "project": "XAVI-DUO Encryption",
+  "protocol": {
+    "duo_semantics": "DUO Numbers Rev009",
+    "glyph_is_numeric_identity": false,
+    "grammar": "[1-9][A-J]*[a-j]*",
+    "hidden_context_committed_in_receipts": true,
+    "legacy_compatibility": false,
+    "post_quantum": "XDE2-PQ2",
+    "symmetric": "XDE2"
+  },
+  "release_date": "2026-10-30",
+  "schema": "XAVI-DUO/RELEASE-GATE/v1",
+  "security_hardening": {
+    "duo_context_commitment": "hidden per-cell contextual interpretation bound into authenticated evidence",
+    "duo_security_claim": "polymorphic representation layer only; AEAD/PQ/FHE remain cryptographic boundary",
+    "hostile_input_bounds": "inline FHE <=1 MiB each and <=2 MiB total before bulk path",
+    "mldsa_parameter_binding": "PASS actual key parameter set must equal declared algorithm",
+    "nonce_full_snapshot_rollback": "external independent anchor supported and required by high-assurance profile",
+    "private_key_use": "high-assurance signing and decapsulation require non-exporting private-ops operator",
+    "provider_identity": "exact allowlisted OCI image ID or hash-pinned native executable",
+    "provider_tag_to_id_race": "CLOSED exact immutable implementation executed",
+    "recipient_key_binding": "PASS derived from actual key",
+    "release_attestation": "ML-DSA-87 detached canonical-manifest signature",
+    "remote_replay_full_snapshot": "independent monotonic anchor required by high-assurance worker",
+    "temporary_pq_material": "secure temp storage preferred"
+  },
+  "standalone_boundary": {
+    "clean_wheel_install": "PASS",
+    "cluster_dependency": false,
+    "core_cluster_literal_gate": "PASS",
+    "reference_lab_evidence": "validation/xavi-cluster/",
+    "runtime_registry_override": "PASS",
+    "wheel_runtime_surface_consistency": "PASS",
+    "worker_cli_from_wheel": "PASS"
+  },
+  "status": "PASS_INTERNAL_VALIDATION",
+  "test_gates": {
+    "duo_rev009_simulator": {
+      "corpus_archive_sha256": "d818dde2c983a9733d39ec95774e396b2bbe119b1927d416b66e37c518d8b9d7",
+      "corpus_checksums": "16/16",
+      "fixture_states": 370,
+      "native_successor_grid": "150x750",
+      "node_tests": 5,
+      "parity_revision": "009",
+      "parity_schema": "DUO-MATH/REV009-PARITY/v1",
+      "python_suite": "PASS",
+      "status": "PASS"
+    },
+    "focused_security": {
+      "note": "49/49 focused security tests: XDE2/PQ2, ML-DSA key-parameter binding, custody/witness, rollback anchors, private ops, signed remote admission, FHE binding/resource limits, release signatures, standalone portability",
+      "status": "PASS",
+      "tests": 49
+    },
+    "node_wasm_fhe": {
+      "composition": {
+        "fast_policy_broker_wg": 34,
+        "split_ckks_wg_runtime": 1,
+        "split_tfhe_wg_runtime": 1,
+        "wasm_worker_real_fhe": 1
+      },
+      "status": "PASS",
+      "tests": 37
+    },
+    "python": {
+      "composition": {
+        "accelerator": 7,
+        "custody_workflows": 2,
+        "focused_security": 49,
+        "nonce_anchor": 3,
+        "resource_limits_v08": 3,
+        "transport": 4,
+        "trust_policy": 3
+      },
+      "status": "PASS",
+      "tests": 71
+    }
+  },
+  "version": "0.8.0"
+}

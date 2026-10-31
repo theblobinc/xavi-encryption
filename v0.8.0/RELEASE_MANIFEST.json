@@ -1,0 +1,169 @@
+{
+  "accelerator_fabric": {
+    "abis": [
+      "cuda",
+      "rocm/hip",
+      "level-zero/sycl",
+      "opencl",
+      "vulkan",
+      "webgpu",
+      "metal",
+      "pjrt/openxla",
+      "generic-cdi",
+      "remote-rpc",
+      "custom"
+    ],
+    "device_permission_gate": true,
+    "read_only_root_default": true,
+    "validated_backend_boundary": "NVIDIA CUDA/TFHE validated in reference lab; other profiles require compatible backend/hardware validation before eligibility",
+    "vendor_neutral": true
+  },
+  "claims": {
+    "classified_system_accreditation": false,
+    "fips_validated_deployment": false,
+    "independent_audit": false,
+    "military_grade": false
+  },
+  "compute_plane": {
+    "openfhe_ckks": "split vector/activation/recurrent profiles",
+    "tfhe": "split client/evaluator Boolean and word IR",
+    "wasm_worker": "zero-import WASM -> typed Worker RPC -> FHE sidecar",
+    "wg_client": "WG-RNN/WG-SFM/WG-SRNN trusted client may learn scheduling/compilation from witnessed outcomes; evaluator remains secret-blind"
+  },
+  "custody": {
+    "authority": {
+      "approval_gate_required": true,
+      "canonical_scheme": "authority://",
+      "legacy_alias": "xavi-authority://",
+      "supported": true
+    },
+    "high_assurance": {
+      "private_ops_non_exporting_required": true
+    },
+    "pkcs11": {
+      "interface_supported": true,
+      "physical_token_validation": false
+    },
+    "remote": {
+      "interface_supported": true
+    },
+    "software_file": {
+      "hardware_bound": false,
+      "high_assurance_long_lived_keys": false,
+      "supported": true
+    },
+    "tpm2": {
+      "interface_supported": true,
+      "reference_lab_validation": true
+    }
+  },
+  "duo_contextual_identity": {
+    "fixed_glyph_law": "N(M)=c(M-1)+r",
+    "fixed_value_behavior": "deterministic modulus staircase",
+    "glyph_alone_is_identity": false,
+    "identity_fields": [
+      "modulus",
+      "external_count",
+      "span",
+      "cycle",
+      "remainder",
+      "left",
+      "right",
+      "symbol"
+    ],
+    "public_frame_contains_modulus_schedule": false,
+    "receipt_context_commitment": true
+  },
+  "duo_semantics": "DUO Numbers Rev009 - contextual A-J/a-j numerals",
+  "license": "MIT OR Apache-2.0",
+  "nonce_state": {
+    "anchor_backends": [
+      "callback for TPM/HSM/secure element/service",
+      "HTTPS+mTLS monotonic service"
+    ],
+    "full_snapshot_rollback": "independent rollback-domain anchor required by high-assurance profile",
+    "local_journal": "append-first, fsync, locked chronology with head/tail recovery",
+    "partial_local_rollback_detection": true,
+    "rollback_detection_action": "durable quarantine and fail closed"
+  },
+  "profiles": {
+    "XDE2": {
+      "bulk_aead": "ChaCha20-Poly1305",
+      "duo_wire": "keyed reversible Rev009 contextual projection",
+      "kdf": "HKDF-SHA256",
+      "legacy_xde1_accepted": false
+    },
+    "XDE2-PQ2": {
+      "bulk": "XDE2",
+      "key_establishment": "ML-KEM-1024",
+      "legacy_pq1_accepted": false,
+      "non_pq_fallback": false
+    },
+    "high_assurance": {
+      "identity_admission_release_signatures": "ML-DSA-87 with key-parameter binding",
+      "key_establishment": "ML-KEM-1024",
+      "non_exporting_private_operations_required": true,
+      "remote_replay_external_anchor_required": true,
+      "software_only_long_lived_key_custody": false,
+      "stateful_nonce_external_rollback_anchor_required": true
+    }
+  },
+  "project": "XAVI-DUO Encryption",
+  "reference_lab": {
+    "evidence_root": "validation/xavi-cluster/",
+    "required_for_runtime": false
+  },
+  "release_date": "2026-10-30",
+  "release_gate": "RELEASE_GATE_v0.8.0.json",
+  "release_security": {
+    "canonical_manifest": true,
+    "clean_wheel_install": "PASS",
+    "detached_signature": "ML-DSA-87",
+    "legacy_xde1_rev008_compatibility": false,
+    "protocol_identity": "XDE2 / XDE2-PQ2 / DUO Rev009",
+    "reproducible_builder": "scripts/build_release.py",
+    "secret_state_excluded_from_release": true,
+    "v080_focused_security_tests": 50,
+    "v080_node_tests": 37,
+    "v080_python_tests": 72,
+    "wheel_runtime_surface_consistency": "PASS"
+  },
+  "remote_admission": {
+    "authority_countersignature": "ML-DSA-87",
+    "caller_cannot_select_trust_keys": true,
+    "durable_replay": true,
+    "evaluator_receives_client_secret": false,
+    "high_assurance_external_replay_anchor": true,
+    "immutable_provider_identity": true,
+    "inline_fhe_ciphertext_limit_bytes": 1048576,
+    "inline_fhe_total_limit_bytes": 2097152,
+    "mldsa_actual_parameter_binding": true,
+    "project_scoped_trust_policy": true,
+    "sender_signature": "ML-DSA-87",
+    "worker_result_signature": "ML-DSA-87"
+  },
+  "schema": "XAVI-DUO/PRODUCT-MANIFEST/v3",
+  "standalone_runtime": {
+    "accelerator_registry_overridable": true,
+    "cluster_dependency": false,
+    "compute_registry_overridable": true,
+    "provider_backends": [
+      "OCI via Podman",
+      "OCI via Docker",
+      "hash-pinned native executable"
+    ],
+    "python": ">=3.11",
+    "required_python_dependency": "cryptography>=41,<46",
+    "transports": [
+      "file",
+      "queue/callback",
+      "framed stream",
+      "unix socket",
+      "TCP",
+      "TLS",
+      "HTTPS",
+      "HTTPS+mTLS"
+    ]
+  },
+  "version": "0.8.0"
+}

@@ -1,0 +1,35 @@
+# Machine-local preservation and runtime state
+/_local/
+**/.state/
+**/state/
+**/.tfhe-gpu-state/
+**/*.pid
+
+# Python
+**/__pycache__/
+**/*.py[cod]
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
+**/.venv/
+**/venv/
+**/build/
+**/dist/
+**/*.egg-info/
+.coverage
+htmlcov/
+
+# Node/editor/OS
+**/node_modules/
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Secrets
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx

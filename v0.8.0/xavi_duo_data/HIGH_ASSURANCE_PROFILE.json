@@ -1,0 +1,56 @@
+{
+  "authority_signatures": "ML-DSA-87",
+  "claims": {
+    "cnsa_2_algorithm_alignment": "ML-KEM-1024 and ML-DSA-87 only; system is not thereby a CNSA-approved solution",
+    "fips_validated_deployment": false,
+    "independently_audited": false,
+    "military_grade": false
+  },
+  "custody": {
+    "production_long_lived_keys": "hardware or external authority gated",
+    "software_only": "development/standard profile only"
+  },
+  "deployment": {
+    "cluster_dependency": false,
+    "lab_evidence_is_configuration": false,
+    "runtime_registries": "deployment-overridable"
+  },
+  "key_establishment": "ML-KEM-1024",
+  "limits": {
+    "aad_bytes": 65536,
+    "padding_bucket_bytes": 1048576,
+    "plaintext_bytes": 16777216
+  },
+  "nonce_rollback": {
+    "accepted_anchor_classes": [
+      "tpm-nv",
+      "hsm-or-secure-element",
+      "remote-mtls-monotonic-service",
+      "deployment-callback-independent-domain"
+    ],
+    "local_file_anchor_sufficient": false,
+    "rollback_detection_action": "quarantine-key-and-fail-closed",
+    "stateful_key_encryption_requires_independent_anchor": true
+  },
+  "provider_execution": {
+    "accelerator_profile_required": true,
+    "allowed_identity_types": [
+      "oci-image-id",
+      "native-executable-sha256"
+    ],
+    "immutable_provider_identity_required": true,
+    "remote_evaluator_client_secret": false
+  },
+  "remote_admission": {
+    "authority_signature": true,
+    "durable_replay": true,
+    "max_ttl_seconds": 900,
+    "project_scoped_trust_policy": true,
+    "sender_signature": true
+  },
+  "schema": "XAVI-DUO/HIGH-ASSURANCE/v1",
+  "status": "experimental-high-assurance-not-accredited",
+  "task_signatures": "ML-DSA-87",
+  "version": "0.7.0",
+  "worker_result_signatures": "ML-DSA-87"
+}
