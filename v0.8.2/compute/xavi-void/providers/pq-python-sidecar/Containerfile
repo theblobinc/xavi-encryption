@@ -1,0 +1,28 @@
+FROM docker.io/library/python:3.13-slim AS liboqs-build
+ARG LIBOQS_REF=0.16.0
+RUN apt-get update && apt-get install -y --no-install-recommends git cmake ninja-build build-essential ca-certificates libssl-dev \
+ && rm -rf /var/lib/apt/lists/*
+RUN set -eux; \
+    git config --global http.version HTTP/1.1; \
+    for attempt in 1 2 3; do \
+      rm -rf /src/liboqs; \
+      git clone --depth 1 --branch "${LIBOQS_REF}" https://github.com/open-quantum-safe/liboqs.git /src/liboqs && break; \
+      if [ "$attempt" -eq 3 ]; then exit 1; fi; \
+      sleep $((attempt * 5)); \
+    done; \
+    cmake -S /src/liboqs -B /src/liboqs/build -GNinja \
+      -DCMAKE_BUILD_TYPE=Release -DOQS_BUILD_ONLY_LIB=ON -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_LIBDIR=lib; \
+    cmake --build /src/liboqs/build --parallel; \
+    cmake --install /src/liboqs/build
+
+FROM docker.io/library/python:3.13-slim
+COPY --from=liboqs-build /usr/local /usr/local
+ENV LD_LIBRARY_PATH=/usr/local/lib
+ENV OQS_INSTALL_PATH=/usr/local
+RUN test -e /usr/local/lib/liboqs.so
+WORKDIR /opt/xavi-void-pq
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY pq_sidecar.py /usr/local/bin/xavi-void-pq-sidecar
+RUN chmod 0755 /usr/local/bin/xavi-void-pq-sidecar
+ENTRYPOINT ["/usr/local/bin/xavi-void-pq-sidecar"]

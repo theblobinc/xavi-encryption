@@ -1,0 +1,224 @@
+{
+  "design": {
+    "availability_is_discovered_at_runtime": true,
+    "hard_gate_order": [
+      "crypto/custody",
+      "compute-capability",
+      "accelerator-abi",
+      "accelerator-profile",
+      "sandbox",
+      "learned-ranking"
+    ],
+    "portable_control_plane": "zero-import WASM -> Worker RPC -> typed capability -> backend -> accelerator profile",
+    "principle": "compute tasks request an accelerator ABI/capability, never a vendor brand",
+    "registry_override_env": "XAVI_DUO_ACCELERATOR_REGISTRY"
+  },
+  "profiles": [
+    {
+      "abis": [
+        "cuda",
+        "opencl",
+        "vulkan-compute",
+        "generic-cdi"
+      ],
+      "deployment_scope": "host-neutral",
+      "id": "nvidia-cdi-compute-v1",
+      "injection": {
+        "default_selector": "all",
+        "device_template": "nvidia.com/gpu={selector}",
+        "type": "cdi"
+      },
+      "notes": [
+        "stock NVIDIA CDI creates runtime driver symlinks and ld-cache/application-profile state inside disposable copy-up overlays",
+        "validated in the reference integration lab with an NVIDIA CUDA TFHE evaluator",
+        "root filesystem outside declared overlays remains read-only"
+      ],
+      "remote_safe": true,
+      "sandbox": {
+        "cap_drop": "all",
+        "network": "none",
+        "no_new_privileges": true,
+        "numeric_user_required": true,
+        "read_only_rootfs": true,
+        "selinux_label": "disable",
+        "writable_injection_overlays": [
+          {
+            "copyup": true,
+            "exec": true,
+            "mode": "0755",
+            "path": "/usr/lib/x86_64-linux-gnu",
+            "persistent": false,
+            "process_write_required": false,
+            "type": "tmpfs"
+          },
+          {
+            "copyup": true,
+            "exec": true,
+            "mode": "0755",
+            "path": "/etc",
+            "persistent": false,
+            "process_write_required": false,
+            "type": "tmpfs"
+          }
+        ]
+      },
+      "status": "tested-readonly-root",
+      "vendor": "nvidia"
+    },
+    {
+      "abis": [
+        "rocm",
+        "hip",
+        "opencl",
+        "vulkan-compute"
+      ],
+      "deployment_scope": "host-neutral",
+      "id": "amd-rocm-device-v1",
+      "injection": {
+        "device_globs": [
+          "/dev/kfd",
+          "/dev/dri/renderD*"
+        ],
+        "type": "device-glob"
+      },
+      "remote_safe": true,
+      "requirements": {
+        "container_userspace": "backend image must contain matching ROCm/HIP userspace",
+        "host_groups": [
+          "render",
+          "video"
+        ]
+      },
+      "sandbox": {
+        "cap_drop": "all",
+        "network": "none",
+        "no_new_privileges": true,
+        "read_only_rootfs": true,
+        "writable_injection_overlays": []
+      },
+      "status": "interface-ready-unvalidated",
+      "vendor": "amd"
+    },
+    {
+      "abis": [
+        "level-zero",
+        "sycl",
+        "opencl",
+        "vulkan-compute"
+      ],
+      "deployment_scope": "host-neutral",
+      "id": "intel-level-zero-device-v1",
+      "injection": {
+        "device_globs": [
+          "/dev/dri/renderD*"
+        ],
+        "type": "device-glob"
+      },
+      "remote_safe": true,
+      "requirements": {
+        "container_userspace": "backend image must contain compatible Level Zero/oneAPI userspace",
+        "host_groups": [
+          "render",
+          "video"
+        ]
+      },
+      "sandbox": {
+        "cap_drop": "all",
+        "network": "none",
+        "no_new_privileges": true,
+        "read_only_rootfs": true,
+        "writable_injection_overlays": []
+      },
+      "status": "interface-ready-unvalidated",
+      "vendor": "intel"
+    },
+    {
+      "abis": [
+        "generic-cdi",
+        "custom"
+      ],
+      "deployment_scope": "host-neutral",
+      "id": "generic-cdi-v1",
+      "injection": {
+        "selector_required": true,
+        "type": "cdi-full-name"
+      },
+      "notes": [
+        "for future GPU/NPU/FPGA/TPU-class runtimes that publish a CDI device name",
+        "vendor-specific writable injection overlays may be added declaratively and must remain ephemeral"
+      ],
+      "remote_safe": true,
+      "sandbox": {
+        "cap_drop": "all",
+        "network": "none",
+        "no_new_privileges": true,
+        "read_only_rootfs": true,
+        "writable_injection_overlays": []
+      },
+      "status": "interface-ready",
+      "vendor": "any"
+    },
+    {
+      "abis": [
+        "opencl",
+        "vulkan-compute",
+        "webgpu",
+        "custom"
+      ],
+      "deployment_scope": "host-neutral",
+      "id": "generic-render-node-v1",
+      "injection": {
+        "device_globs": [
+          "/dev/dri/renderD*"
+        ],
+        "type": "device-glob"
+      },
+      "remote_safe": true,
+      "requirements": {
+        "host_groups": [
+          "render",
+          "video"
+        ]
+      },
+      "sandbox": {
+        "cap_drop": "all",
+        "network": "none",
+        "no_new_privileges": true,
+        "read_only_rootfs": true,
+        "writable_injection_overlays": []
+      },
+      "status": "interface-ready",
+      "vendor": "any"
+    },
+    {
+      "abis": [
+        "custom",
+        "metal",
+        "openxla",
+        "pjrt",
+        "remote-rpc"
+      ],
+      "deployment_scope": "host-neutral",
+      "id": "remote-accelerator-rpc-v1",
+      "injection": {
+        "local_device_access": false,
+        "type": "remote-rpc"
+      },
+      "notes": [
+        "for cluster workers, vendor appliances, NPUs/TPUs, FPGA services, or future accelerators exposed behind an authenticated capability endpoint"
+      ],
+      "remote_safe": true,
+      "sandbox": {
+        "cap_drop": "all",
+        "network": "brokered-only",
+        "no_new_privileges": true,
+        "read_only_rootfs": true,
+        "writable_injection_overlays": []
+      },
+      "status": "interface-ready",
+      "vendor": "any"
+    }
+  ],
+  "schema": "XAVI-DUO/ACCELERATOR-PROVIDERS/v2",
+  "version": "0.6.0"
+}

@@ -1,0 +1,14 @@
+# Source fingerprints generated 2026-10-29
+b50a590a17af158f3cf9510cd45f10fe06c6e05e2c0b69892295ef61fc617a15  vendor/duo_core.py
+02956cc0d447b5f1207a0d56e1798faa6f71bcac7d2428e44c3c2af0fc2517b3  vendor/duo_theorems.py
+1221ecb15a1c2fc5cfddeb9aa748808ccdc26ff467ff1b25a8ea1303eaf77663  references/xavi-void/shake.py
+b461a1422a6e7f1e28806c27b05a0e655ec8c56f8888792159f3af30b7c33565  references/xavi-void/CRYPTO_PROFILE.md
+ca8dbee75c6f9562015ce031951a4fcaa321bf87254786ab79bd8dea4428768c  references/xavi-void/WIRE_FORMAT.md
+ca977b03ea0d30840cba149fb9045134b89a82153070f828b1556877a009c2b3  references/xavi-void/PRIVACY_HARDENING.md
+4aad1c22f97367e8752c0d36a1eeec19c0a36ee7b91e41e07fdc9d42965e557f  references/xavi-void/EVIDENCE_PROFILE.md
+# Read-only live xavi-void source fingerprints at freeze time
+1221ecb15a1c2fc5cfddeb9aa748808ccdc26ff467ff1b25a8ea1303eaf77663  /datastore3/wg-rnn/xavi-void/src/xavi_void/crypto/shake.py
+b461a1422a6e7f1e28806c27b05a0e655ec8c56f8888792159f3af30b7c33565  /datastore3/wg-rnn/xavi-void/docs/CRYPTO_PROFILE.md
+ca8dbee75c6f9562015ce031951a4fcaa321bf87254786ab79bd8dea4428768c  /datastore3/wg-rnn/xavi-void/docs/WIRE_FORMAT.md
+ca977b03ea0d30840cba149fb9045134b89a82153070f828b1556877a009c2b3  /datastore3/wg-rnn/xavi-void/docs/PRIVACY_HARDENING.md
+4aad1c22f97367e8752c0d36a1eeec19c0a36ee7b91e41e07fdc9d42965e557f  /datastore3/wg-rnn/xavi-void/docs/EVIDENCE_PROFILE.md

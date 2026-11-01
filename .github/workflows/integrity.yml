@@ -28,7 +28,7 @@ jobs:
       - name: Install runtime dependency
         run: python3 -m pip install cryptography==41.0.7
       - name: Run portable cryptographic and state-security tests
-        working-directory: v0.8.1
+        working-directory: v0.8.2
         run: |
           python3 -m unittest -v \
             tests.test_xde2 \
@@ -37,9 +37,11 @@ jobs:
             tests.test_secure_file_state_v081 \
             tests.test_cli_receipts \
             tests.test_resource_limits_v08 \
-            tests.test_transport
+            tests.test_transport \
+            tests.test_tpm2_custody_v082 \
+            tests.test_provider_runtime_v082
       - name: Run portable JavaScript policy tests
-        working-directory: v0.8.1
+        working-directory: v0.8.2
         run: |
           node --test --test-concurrency=1 \
             tests/accelerator-registry.test.mjs \
@@ -60,9 +62,9 @@ jobs:
       - name: Install pinned build/runtime toolchain
         run: python3 -m pip install setuptools==68.1.2 wheel==0.42.0 cryptography==41.0.7
       - name: Build wheel without mutable build isolation
-        working-directory: v0.8.1
+        working-directory: v0.8.2
         run: python3 -m pip wheel --no-deps --no-build-isolation . -w /tmp/xavi-duo-wheel
       - name: Install wheel and run symmetric self-test
         run: |
-          python3 -m pip install --force-reinstall --no-deps /tmp/xavi-duo-wheel/xavi_duo_encryption-0.8.1-py3-none-any.whl
+          python3 -m pip install --force-reinstall --no-deps /tmp/xavi-duo-wheel/xavi_duo_encryption-0.8.2-py3-none-any.whl
           xavi-duo self-test

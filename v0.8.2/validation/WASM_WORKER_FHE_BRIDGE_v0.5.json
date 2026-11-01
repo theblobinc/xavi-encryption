@@ -1,0 +1,19 @@
+{
+  "schema": "XAVI-DUO/WASM-WORKER-FHE-BRIDGE/v1",
+  "status": "PASS",
+  "native_wasm_host_imports": false,
+  "worker_capabilities": [
+    "fhe.boolean",
+    "fhe.word64",
+    "fhe.vector.approx"
+  ],
+  "tfhe_client_secret_only_in_client": true,
+  "ckks_client_secret_only_in_client": true,
+  "raw_gpu_exposed_to_wasm": false,
+  "network_exposed_to_wasm": false,
+  "filesystem_exposed_to_wasm": false,
+  "word64_wire": "unsigned-decimal-string",
+  "word64_exact": "1234605616436508552",
+  "cosine_abs_error": 2.4383828289842313e-12,
+  "authority": false
+}

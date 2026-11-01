@@ -1,0 +1,20 @@
+# CUDA 12.x is intentionally used for production-3's R535 driver.
+# Build entirely in-container; no host Rust/CUDA toolkit installation is required.
+FROM docker.io/nvidia/cuda:12.2.2-devel-ubuntu22.04 AS build
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      build-essential curl ca-certificates pkg-config libssl-dev clang libclang-dev python3 python3-pip \
+    && python3 -m pip install --no-cache-dir 'cmake>=3.24,<4' \
+    && rm -rf /var/lib/apt/lists/* \
+    && curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain 1.91.1
+ENV PATH=/root/.cargo/bin:$PATH
+WORKDIR /src
+COPY Cargo.toml Cargo.toml
+COPY src src
+RUN cargo build --release --features cuda --bin xvoid-tfhe-evaluator
+
+FROM docker.io/nvidia/cuda:12.2.2-runtime-ubuntu22.04
+RUN useradd --system --uid 10001 --create-home xvoid && mkdir -p /keys && chown xvoid:xvoid /keys
+COPY --from=build /src/target/release/xvoid-tfhe-evaluator /usr/local/bin/xvoid-tfhe-evaluator
+USER xvoid
+ENTRYPOINT ["/usr/local/bin/xvoid-tfhe-evaluator","--device","cuda"]
+CMD ["--server-key","/keys/server-key.bin"]

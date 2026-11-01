@@ -1,0 +1,7 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {selectProvider,makeExecutionRequest} from '../providers/xavi-exec/capability-broker.mjs';
+test('remote FHE selection rejects combined client/evaluator',()=>{const p=selectProvider({capability:'fhe.boolean',remote:true});assert.equal(p.id,'tfhe-cpu-evaluator');assert.equal(p.contains_client_secret,false);});
+test('local FHE may select split evaluator under no-client-secret policy',()=>{const p=selectProvider({capability:'fhe.word64'});assert.equal(p.contains_client_secret,false);});
+test('validated prod3 CUDA TFHE evaluator is eligible only as secret-blind remote GPU provider',()=>{const p=selectProvider({capability:'gpu.fhe',device:'cuda',remote:true});assert.equal(p.id,'tfhe-cuda-evaluator');assert.equal(p.contains_client_secret,false);assert.equal(p.remote_safe,true);assert.equal(p.image_id,'2ea9e686f6c3a8df005791247ab64115087a606efbaf046af6f9e0f05fe6152e');assert.equal(p.sandbox.network,'none');assert.equal(p.sandbox.server_key_mount,'ro');});
+test('portable request never grants authority',()=>{const p=selectProvider({capability:'fhe.boolean',remote:true});const r=makeExecutionRequest({capability:'fhe.boolean',programDigest:'sha256:p',inputDigest:'sha256:i',provider:p,sessionId:'s',sequence:1,custodyRef:'remote://prod3/fhe'});assert.equal(r.authority,false);assert.equal(r.provider_id,'tfhe-cpu-evaluator');});

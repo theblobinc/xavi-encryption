@@ -1,0 +1,13 @@
+FROM docker.io/library/rust:1.91.1-bookworm AS build
+WORKDIR /src
+COPY Cargo.toml Cargo.toml
+COPY src src
+RUN cargo build --release --bin xvoid-tfhe-client --bin xvoid-tfhe-evaluator
+
+FROM docker.io/library/debian:bookworm-slim
+RUN useradd --system --uid 10001 --create-home xvoid && mkdir -p /keys && chown xvoid:xvoid /keys
+COPY --from=build /src/target/release/xvoid-tfhe-client /usr/local/bin/xvoid-tfhe-client
+COPY --from=build /src/target/release/xvoid-tfhe-evaluator /usr/local/bin/xvoid-tfhe-evaluator
+USER xvoid
+ENTRYPOINT ["/usr/local/bin/xvoid-tfhe-evaluator"]
+CMD ["--server-key","/keys/server-key.bin","--device","cpu"]

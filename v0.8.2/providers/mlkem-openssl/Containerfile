@@ -1,0 +1,12 @@
+FROM docker.io/library/alpine:3.22 AS stage
+RUN apk add --no-cache openssl && \
+    openssl version && openssl list -kem-algorithms | grep -q 'ML-KEM-1024'
+
+FROM scratch
+COPY --from=stage /lib/ld-musl-x86_64.so.1 /lib/ld-musl-x86_64.so.1
+COPY --from=stage /usr/lib/libcrypto.so.3 /usr/lib/libcrypto.so.3
+COPY --from=stage /usr/lib/libssl.so.3 /usr/lib/libssl.so.3
+COPY --from=stage /usr/bin/openssl /usr/bin/openssl
+COPY --from=stage /etc/ssl/openssl.cnf /etc/ssl/openssl.cnf
+ENV OPENSSL_CONF=/etc/ssl/openssl.cnf
+ENTRYPOINT ["/usr/bin/openssl"]
