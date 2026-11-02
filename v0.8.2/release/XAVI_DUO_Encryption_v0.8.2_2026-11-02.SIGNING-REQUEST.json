@@ -1,0 +1,25 @@
+{
+  "algorithm": "ML-DSA-87",
+  "artifact_hash_list_sha256": "sha256:bcf274b956478e0db22b0661398a1d8ad7469fda7ff19dbed4e492af18c65273",
+  "authority": false,
+  "custody_requirement": {
+    "allowed_operator_schemes": [
+      "remote",
+      "tpm2",
+      "pkcs11"
+    ],
+    "hardware_bound_preferred": true,
+    "hardware_bound_required_for_hardware_schemes": true,
+    "non_exporting_private_key": true
+  },
+  "manifest": "XAVI_DUO_Encryption_v0.8.2_2026-11-02.RELEASE.json",
+  "manifest_canonical_sha256": "sha256:afecddbe0941794be169e9a097ced7640e5432830d97ab2648f9a1d02bc92f26",
+  "manifest_file_sha256": "sha256:63dfeb027479f0f8b69caff3a66acce0bf1f2c55f3a6d0ce007f5168b754feb7",
+  "project": "XAVI-DUO Encryption",
+  "release_proof_sha256": "sha256:e15946a9b90b7eec0da91d858d9acccd5745c58bb50bd13a89796402e13961c2",
+  "schema": "XAVI-DUO/RELEASE-SIGNING-REQUEST/v1",
+  "signature_domain": "XAVI-DUO/RELEASE-SIGNATURE/v1\\x00",
+  "signing_message_bytes": 62,
+  "signing_message_sha256": "sha256:71f2a2f1bf546e5879b625852cc765e4d5cd3279279781b7f5cede1b18ba7058",
+  "version": "0.8.2"
+}

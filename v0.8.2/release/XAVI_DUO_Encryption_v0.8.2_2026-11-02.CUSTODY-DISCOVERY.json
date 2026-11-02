@@ -1,0 +1,27 @@
+{
+  "authority": false,
+  "project": "XAVI-DUO Encryption",
+  "requirements": {
+    "algorithm": "ML-DSA-87",
+    "eligible_schemes": [
+      "remote",
+      "tpm2",
+      "pkcs11"
+    ],
+    "file_private_key_eligible": false,
+    "hardware_bound_required_for_hardware_schemes": true,
+    "non_exporting_private_key": true
+  },
+  "result": {
+    "current_release_root_provisioned": false,
+    "fail_closed": true,
+    "reason": "The v0.8.2 TPM2 custody implementation is shipped, but no current eligible non-exporting ML-DSA-87 organizational release root is provisioned/configured for release signing.",
+    "release_signature_created": false,
+    "tpm2_backend_shipped": true
+  },
+  "schema": "XAVI-DUO/RELEASE-CUSTODY-DISCOVERY/v1",
+  "signing_request": "XAVI_DUO_Encryption_v0.8.2_2026-11-02.SIGNING-REQUEST.json",
+  "signing_request_sha256": "sha256:19014095dd39f8a2251fb8774142863e0f7740d218abe23e249025074f5b24b4",
+  "status": "NON_EXPORTING_RELEASE_ROOT_NOT_CONFIGURED",
+  "version": "0.8.2"
+}

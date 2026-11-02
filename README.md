@@ -16,25 +16,23 @@ Standalone authenticated encryption, post-quantum transport, key custody, and en
 
 DUO-Math is **not** treated as a replacement for standard cryptography or as extra entropy. The cryptographic security boundary remains the standard AEAD, KEM, and signature primitives; DUO provides the authenticated reversible polymorphic representation.
 
-## Current release — v0.8.1
+## Current release — v0.8.2
 
-`v0.8.1/` is the current canonical standalone revision. It carries forward v0.8.0 and adds:
+`v0.8.2/` is the current canonical standalone revision. It carries forward v0.8.1 and adds:
 
-- repaired CLI receipt generation/verification paths with subprocess regression coverage;
-- crash-recoverable two-phase replay anchoring and rollback quarantine;
-- no-follow/fstat hardening for sensitive local key/nonce state;
-- actual ML-KEM parameter-set binding;
-- stricter XDE2 frame inspection;
-- corrected XDE2/Rev009 protocol documentation;
-- exact Python build-backend pins and reproducible no-isolation release builds;
-- repository CI for portable security tests and wheel smoke validation.
+- a shipped standalone TPM2 PCR-bound KEK custody backend and `xavi-duo-tpm2-custody` CLI;
+- authenticated wrapping of PQ private objects while explicitly avoiding any claim that TPM hardware natively executes ML-DSA/ML-KEM;
+- hardware-bound attestation requirements for high-assurance `tpm2://` and `pkcs11://` operators;
+- unique OCI provider container names with forced cleanup on timeout/exception;
+- regression coverage for TPM custody, provider cleanup, and cgroup-manager fallback;
+- updated standalone release/audit metadata and a reproducible v0.8.2 artifact set.
 
-Validation for this release: **82/82 Python**, **37/37 Node/WASM/FHE**, and **33/33 portable security-core** tests. Two independent release builds produced byte-identical source archives, wheels, and release manifests. Organizational ML-DSA-87 release signing remains pending until a configured non-exporting release root is available.
+Validation for this release: **92/92 Python** and **37/37 Node/WASM/FHE** tests, including **10/10 new v0.8.2 TPM/provider regressions** and an independently rerun **14/14 provider-backed Python subset on prod3**. Two independent deterministic release builds produced byte-identical source archives, wheels, and release manifests. Organizational ML-DSA-87 release signing remains pending until a current configured non-exporting release root is provisioned.
 
 ## Quick start
 
 ```bash
-cd v0.8.1
+cd v0.8.2
 python3 -m pip install .
 
 xavi-duo keygen --out alice.xdek
@@ -48,7 +46,7 @@ xavi-duo decrypt --key alice.xdek --in secret.xde --out recovered.txt \
 cmp plain.txt recovered.txt
 ```
 
-For the threat model, custody requirements, PQ provider boundary, remote execution, and encrypted-compute design, start with `v0.8.1/README.md`, `v0.8.1/SECURITY.md`, `v0.8.1/THREAT_MODEL.md`, `v0.8.1/HIGH_ASSURANCE_PROFILE.json`, and `v0.8.1/PROTOCOL.md`.
+For the threat model, custody requirements, PQ provider boundary, remote execution, and encrypted-compute design, start with `v0.8.2/README.md`, `v0.8.2/SECURITY.md`, `v0.8.2/THREAT_MODEL.md`, `v0.8.2/HIGH_ASSURANCE_PROFILE.json`, and `v0.8.2/PROTOCOL.md`.
 
 ## Versioned repository model
 
@@ -57,7 +55,8 @@ Every published revision is a **self-contained root-level version directory**. A
 ```text
 xavi-encrypt/
 ├── v0.8.0/        # frozen first canonical release
-├── v0.8.1/        # current hardened release
+├── v0.8.1/        # frozen hardening release
+├── v0.8.2/        # current TPM/provider hardening release
 ├── VERSION_INDEX.json
 ├── CHANGELOG.md
 └── tools/verify_repository.py
@@ -72,7 +71,7 @@ python3 tools/verify_repository.py
 Version test suite:
 
 ```bash
-cd v0.8.1
+cd v0.8.2
 python3 -m unittest discover -s tests -p 'test_*.py' -v
 ```
 
@@ -82,7 +81,7 @@ Some PQ-provider, FHE, hardware-custody, and accelerator tests require the corre
 
 Each canonical version preserves its source archive, wheel, release manifest, reproducibility proof, artifact hash list, signing request, and custody-discovery record under `vX.Y.Z/release/`. `VERSION_INDEX.json` binds their SHA-256 digests.
 
-The v0.8.1 release intentionally has **no detached release signature yet**: high-assurance release signing requires ML-DSA-87 through a non-exporting custody operator. An exportable file key is not substituted merely to make the status look green.
+The v0.8.2 release intentionally has **no detached release signature yet**: high-assurance release signing requires ML-DSA-87 through a non-exporting custody operator. An exportable file key is not substituted merely to make the status look green.
 
 ## Licensing
 

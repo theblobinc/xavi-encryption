@@ -1,7 +1,7 @@
 {
   "schema": "xavi-encrypt/version-index/v1",
   "repository": "xavi-encrypt",
-  "latest": "v0.8.1",
+  "latest": "v0.8.2",
   "versions": [
     {
       "version": "v0.8.0",
@@ -42,6 +42,26 @@
       "artifact_list_sha256": "7bf888eef085a4e7af82a00825abdb45c1ee68431375b03cfdcc674b840d0c07",
       "signing_request_sha256": "cc5016b38fe1746354e12e59dcb9a5a87b2d8ae252612842239819017ec0505e",
       "custody_discovery_sha256": "8739e93f1cfbb5ab85b7673a5e37ff1521d0f6232062adebf2163e1f5f163ee2"
+    },
+    {
+      "version": "v0.8.2",
+      "date": "2026-11-02",
+      "path": "v0.8.2",
+      "release_status": "PASS_INTERNAL_VALIDATION_REPRODUCIBLE_SIGNATURE_PENDING",
+      "source_tree_sha256": "62985a0563ed4ed11558e600a2484e92a1c84ad64e99ade11db9ab5b3d95ee0d",
+      "release_manifest_sha256": "63dfeb027479f0f8b69caff3a66acce0bf1f2c55f3a6d0ce007f5168b754feb7",
+      "source_archive": {
+        "path": "v0.8.2/release/XAVI_DUO_Encryption_v0.8.2_2026-11-02.tar.gz",
+        "sha256": "93d72b1bc2544dc6df9c3c609366c54a9deda6cea4884a2b9914583eb3059dcf"
+      },
+      "wheel": {
+        "path": "v0.8.2/release/xavi_duo_encryption-0.8.2-py3-none-any.whl",
+        "sha256": "4d6d4cc9a380830db072b39ed19e736fdfb1645009e21d739cb52ad0ecdff02b"
+      },
+      "release_proof_sha256": "e15946a9b90b7eec0da91d858d9acccd5745c58bb50bd13a89796402e13961c2",
+      "artifact_list_sha256": "bcf274b956478e0db22b0661398a1d8ad7469fda7ff19dbed4e492af18c65273",
+      "signing_request_sha256": "19014095dd39f8a2251fb8774142863e0f7740d218abe23e249025074f5b24b4",
+      "custody_discovery_sha256": "65a5173b917b436e15fc86a6bb0579a3f4c2c5a9e0043ff5633ab86266a37913"
     }
   ]
 }
