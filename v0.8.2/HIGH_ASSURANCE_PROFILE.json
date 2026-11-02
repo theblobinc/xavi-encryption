@@ -7,8 +7,11 @@
     "military_grade": false
   },
   "custody": {
+    "hardware_uri_requires_hardware_bound_attestation": true,
     "production_long_lived_keys": "hardware or external authority gated",
-    "software_only": "development/standard profile only"
+    "release_root_status": "not provisioned; release signature pending",
+    "software_only": "development/standard profile only",
+    "tpm2_model": "PCR-bound KEK wraps software PQ private keys; ML-DSA/ML-KEM execute in the pinned external provider"
   },
   "deployment": {
     "cluster_dependency": false,
@@ -27,8 +30,10 @@
       "oci-image-id",
       "native-executable-sha256"
     ],
+    "forced_cleanup_on_timeout": true,
     "immutable_provider_identity_required": true,
-    "remote_evaluator_client_secret": false
+    "remote_evaluator_client_secret": false,
+    "unique_oci_container_names": true
   },
   "remote_admission": {
     "authority_signature": true,
@@ -41,6 +46,6 @@
   "schema": "XAVI-DUO/HIGH-ASSURANCE/v1",
   "status": "experimental-high-assurance-not-accredited",
   "task_signatures": "ML-DSA-87",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "worker_result_signatures": "ML-DSA-87"
 }

@@ -12,7 +12,7 @@ High-assurance `tpm2://` and `pkcs11://` operators must now attest `hardware_bou
 **License:** MIT OR Apache-2.0
 
 
-> **Standalone product boundary (v0.8.1):** this suite does not depend on the Xavi cluster, MCP, prod3/prod4, NFS, a private registry, or fixed host paths. The Xavi systems are reference integration/test hardware only. See `STANDALONE_DEPLOYMENT.md`. Cluster-specific proof artifacts are isolated under `validation/xavi-cluster/` and are never runtime configuration.
+> **Standalone product boundary (v0.8.2):** this suite does not depend on the Xavi cluster, MCP, prod3/prod4, NFS, a private registry, or fixed host paths. The Xavi systems are reference integration/test hardware only. See `STANDALONE_DEPLOYMENT.md`. Cluster-specific proof artifacts are isolated under `validation/xavi-cluster/` and are never runtime configuration.
 XDE2 is the symmetric DUO-Math encryption profile. XDE2-PQ2 adds an ML-KEM-1024 recipient envelope through an allowlisted provider backend. The provider may be an immutable OCI image (Podman or Docker) or a hash-pinned native executable; no cluster service is required. It deliberately separates two layers:
 
 1. **cryptographic security** — standard ChaCha20-Poly1305 AEAD with HKDF-SHA256 key separation;
@@ -66,7 +66,7 @@ Each encryption claims one 32-bit counter and constructs the RFC 8439 96-bit non
 random 64-bit key prefix || monotonic 32-bit counter
 ```
 
-The next counter is durably appended **before** the nonce is returned. A torn/malformed journal fails closed. Standard mode detects local journal/head inconsistencies, but a full-machine snapshot can roll both files back together. In the v0.8.1 high-assurance profile, stateful-key encryption therefore requires an **independent rollback-domain nonce anchor** (for example TPM/HSM/secure-element backed service or HTTPS+mTLS monotonic witness). Reused/lower counters quarantine the key and fail closed. Do not clone a stateful key for concurrent encryption.
+The next counter is durably appended **before** the nonce is returned. A torn/malformed journal fails closed. Standard mode detects local journal/head inconsistencies, but a full-machine snapshot can roll both files back together. In the v0.8.2 high-assurance profile, stateful-key encryption therefore requires an **independent rollback-domain nonce anchor** (for example TPM/HSM/secure-element backed service or HTTPS+mTLS monotonic witness). Reused/lower counters quarantine the key and fail closed. Do not clone a stateful key for concurrent encryption.
 
 ## v0.8.1 hardening
 

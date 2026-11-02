@@ -3,7 +3,7 @@
 > **Lab evidence note:** Any prod3/prod4/vm1, Xavi DNS, NFS, or cluster-specific names in this document describe validation history only. The standalone suite does not require that infrastructure.
 
 
-**Version:** 0.8.1
+**Version:** 0.8.2
 **Status:** experimental internal validation; not independently audited
 
 ## Layering

@@ -38,6 +38,7 @@
       "supported": true
     },
     "high_assurance": {
+      "hardware_bound_required_for_tpm2_pkcs11": true,
       "private_ops_non_exporting_required": true
     },
     "pkcs11": {
@@ -53,7 +54,12 @@
       "supported": true
     },
     "tpm2": {
+      "current_release_root_provisioned": false,
+      "implementation_shipped": true,
       "interface_supported": true,
+      "kek_sealed_to_pcr_policy": true,
+      "native_mldsa_mlkem": false,
+      "pq_private_object_wrapping": "ChaCha20-Poly1305",
       "reference_lab_validation": true
     }
   },
@@ -109,12 +115,16 @@
     }
   },
   "project": "XAVI-DUO Encryption",
+  "provider_execution": {
+    "forced_cleanup_on_timeout": true,
+    "unique_oci_container_names": true
+  },
   "reference_lab": {
     "evidence_root": "validation/xavi-cluster/",
     "required_for_runtime": false
   },
   "release_date": "2026-10-31",
-  "release_gate": "RELEASE_GATE_v0.8.1.json",
+  "release_gate": "RELEASE_GATE_v0.8.2.json",
   "release_security": {
     "actual_mldsa_key_parameter_binding": true,
     "actual_mlkem_key_parameter_binding": true,
@@ -174,5 +184,5 @@
       "HTTPS+mTLS"
     ]
   },
-  "version": "0.8.1"
+  "version": "0.8.2"
 }

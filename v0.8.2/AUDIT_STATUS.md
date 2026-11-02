@@ -1,4 +1,4 @@
-# XAVI-DUO Encryption v0.8.1 — Security / Audit Status
+# XAVI-DUO Encryption v0.8.2 — Security / Audit Status
 
 **Status:** standalone high-assurance experimental implementation; internal gates green; independent external security audit and accreditation are still required before treating the suite as a certified high-assurance product.
 
@@ -40,6 +40,15 @@ The DUO transform is a reversible authenticated wire/semantic layer. No independ
 - side-channel evaluation appropriate to the target hardware and threat model.
 
 Reference Xavi-cluster evidence lives under `validation/xavi-cluster/`; it is lab evidence only and is not a runtime dependency.
+
+## Closed in v0.8.2
+
+- Ships the standalone TPM2 PCR-bound KEK custody backend and `xavi-duo-tpm2-custody` CLI.
+- Requires explicit hardware binding for high-assurance `tpm2://` and `pkcs11://` operators.
+- Documents that TPM protects the wrapping key; ML-DSA/ML-KEM execute in the pinned OpenSSL provider with ephemeral signer-process plaintext.
+- Adds unique OCI provider container names plus forced cleanup on timeout/exception, closing the stale-provider-container failure observed during validation.
+- Full validation: Python 92/92, Node/WASM/FHE 37/37, new TPM/provider regressions 10/10, independent prod3 provider-backed subset 14/14.
+- Release signature remains pending until a current non-exporting organizational ML-DSA-87 release root is actually provisioned.
 
 ## Closed in v0.8.1
 

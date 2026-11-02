@@ -6,7 +6,7 @@ XAVI-DUO is a standalone encryption and encrypted-compute suite. Confidentiality
 
 ### High-assurance profile
 
-The v0.8.1 high-assurance profile selects ML-KEM-1024 and ML-DSA-87, immutable provider identity, project-scoped signed remote admission, secret-blind remote FHE evaluators, hardware/external authority custody for long-lived private keys, and an independent nonce rollback anchor for stateful symmetric encryption.
+The v0.8.2 high-assurance profile selects ML-KEM-1024 and ML-DSA-87, immutable provider identity, project-scoped signed remote admission, secret-blind remote FHE evaluators, hardware/external authority custody for long-lived private keys, and an independent nonce rollback anchor for stateful symmetric encryption.
 
 Algorithm selection alone does not make a deployment FIPS validated, accredited, classified-system approved, or "military grade." Those statuses require validated modules, evaluated implementation/deployment, operational controls, key management, and external authorization.
 
@@ -14,7 +14,7 @@ Algorithm selection alone does not make a deployment FIPS validated, accredited,
 
 The remote worker verifies, in order, bounded input structure, sender ML-DSA-87 signature, project trust policy, short-lived authority countersignature/scope, durable replay claim, PQ transport authentication/decryption, capability/operation/provider binding, immutable provider identity, and accelerator sandbox policy before evaluation. Worker results are ML-DSA-87 signed and bind the project/policy/request/provider/evaluator result.
 
-## v0.8.1 state and parameter binding
+## v0.8.2 state and parameter binding
 
 - ML-DSA and ML-KEM operations bind the requested parameter set to the parameter set encoded by the actual key object before signing, verification, encapsulation, or decapsulation. Metadata alone is not accepted as algorithm identity.
 - High-assurance replay chronology uses a claim-bound two-phase external anchor (`prepare` then `commit`). Local expected-sequence validation occurs before external mutation, a durable pending intent bridges crash recovery, and a completed external claim observed after local rollback quarantines the replay state rather than re-executing the message.

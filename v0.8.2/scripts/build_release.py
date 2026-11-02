@@ -12,7 +12,7 @@ import argparse, gzip, hashlib, importlib.metadata, importlib.util, json, os, sh
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
-DEFAULT_EPOCH=1793404800  # 2026-10-31T00:00:00Z
+DEFAULT_EPOCH=1793577600  # 2026-11-02T00:00:00Z
 
 def sha256_path(p:Path)->str:
     h=hashlib.sha256()
@@ -71,7 +71,7 @@ def build_wheel(outdir:Path,epoch:int)->Path:
 
 def main():
     ap=argparse.ArgumentParser(description='Build deterministic XAVI-DUO standalone release artifacts')
-    ap.add_argument('--outdir',required=True); ap.add_argument('--date',default='2026-10-31'); ap.add_argument('--epoch',type=int,default=int(os.environ.get('SOURCE_DATE_EPOCH',DEFAULT_EPOCH)))
+    ap.add_argument('--outdir',required=True); ap.add_argument('--date',default='2026-11-02'); ap.add_argument('--epoch',type=int,default=int(os.environ.get('SOURCE_DATE_EPOCH',DEFAULT_EPOCH)))
     a=ap.parse_args(); outdir=Path(a.outdir).resolve(); outdir.mkdir(parents=True,exist_ok=True)
     version=(ROOT/'VERSION').read_text().strip(); root_name=f'XAVI_DUO_Encryption_v{version}_{a.date}'
     for p in outdir.glob(root_name+'*'): p.unlink() if p.is_file() else None

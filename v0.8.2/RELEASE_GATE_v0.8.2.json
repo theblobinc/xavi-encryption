@@ -1,0 +1,64 @@
+{
+  "authority": false,
+  "claims": {
+    "classified_system_accreditation": false,
+    "fips_validated_deployment": false,
+    "independent_audit": false,
+    "military_grade": false
+  },
+  "closed_defects": [
+    "standalone tpm2:// backend ships PCR-policy-sealed 256-bit KEK custody for authenticated wrapping of PQ private objects",
+    "high-assurance tpm2:// and pkcs11:// operators require explicit hardware-bound attestation in addition to a non-exporting caller API",
+    "TPM custody documentation distinguishes TPM-protected wrapping from native TPM ML-DSA/ML-KEM execution",
+    "OCI provider invocations use unique names and forcibly remove their named container when an in-process timeout or exception interrupts execution",
+    "provider systemd-scope fallback retries with cgroupfs under a distinct uniquely named container",
+    "v0.8.2 wheel includes the TPM custody module and xavi-duo-tpm2-custody console entry point"
+  ],
+  "date": "2026-11-02",
+  "project": "XAVI-DUO Encryption",
+  "protocol": {
+    "duo_grammar": "[1-9][A-J]*[a-j]*",
+    "duo_revision": "009",
+    "legacy_compatibility": false,
+    "post_quantum": "XDE2-PQ2",
+    "symmetric": "XDE2"
+  },
+  "release_signature": {
+    "algorithm_required": "ML-DSA-87",
+    "current_release_root_provisioned": false,
+    "status": "PENDING_NON_EXPORTING_RELEASE_ROOT",
+    "tpm2_backend_shipped": true
+  },
+  "schema": "XAVI-DUO/RELEASE-GATE/v2",
+  "status": "PASS_INTERNAL_VALIDATION_RELEASE_SIGNATURE_PENDING",
+  "tests": {
+    "independent_provider_backed_python": {
+      "failed": 0,
+      "host": "prod3",
+      "passed": 14
+    },
+    "new_v082_security_regressions": {
+      "failed": 0,
+      "provider_runtime_cleanup_and_isolation": 3,
+      "tpm2_custody": 7
+    },
+    "node_wasm_fhe": {
+      "failed": 0,
+      "host": "prod4",
+      "passed": 37
+    },
+    "package_smoke": {
+      "host": "prod3",
+      "self_test": "PASS",
+      "tpm_custody_cli_help": "PASS",
+      "wheel_build": true,
+      "wheel_install": true
+    },
+    "python_unittest": {
+      "failed": 0,
+      "host": "prod3",
+      "passed": 92
+    }
+  },
+  "version": "0.8.2"
+}

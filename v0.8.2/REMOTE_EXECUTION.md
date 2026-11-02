@@ -1,4 +1,4 @@
-# Encrypted Polymorphic Remote Execution — v0.8.1
+# Encrypted Polymorphic Remote Execution — v0.8.2
 
 > **Lab evidence note:** Any prod3/prod4/vm1, Xavi DNS, NFS, or cluster-specific names in this document describe validation history only. The standalone suite does not require that infrastructure.
 
