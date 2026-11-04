@@ -1,0 +1,33 @@
+{
+  "date": "2026-11-04",
+  "frozen_commit": "aa65bd5acbbc9789ad6731fc26bbda3fe3b68b21",
+  "frozen_tag": "v0.8.2",
+  "manifest": {
+    "canonical_sha256": "afecddbe0941794be169e9a097ced7640e5432830d97ab2648f9a1d02bc92f26",
+    "file_sha256": "63dfeb027479f0f8b69caff3a66acce0bf1f2c55f3a6d0ce007f5168b754feb7",
+    "path": "v0.8.2/release/XAVI_DUO_Encryption_v0.8.2_2026-11-02.RELEASE.json"
+  },
+  "note": "Public key trust-anchor registration is an independent owner decision; no runtime authority or FIPS certification is claimed.",
+  "schema": "XAVI-DUO/RELEASE-ATTESTATION-RECEIPT/v1",
+  "signature": {
+    "authority": false,
+    "cryptographic_verification": "PASS",
+    "file_sha256": "b600df191b575254f37f4ce4e43ce830a15b6ef16fd52892733779ac96985c20",
+    "path": "attestations/v0.8.2/XAVI_DUO_Encryption_v0.8.2_2026-11-02.RELEASE-SIGNATURE.json",
+    "signature_bytes": 4627
+  },
+  "signer": {
+    "algorithm": "ML-DSA-87",
+    "hardware_bound_wrapping": true,
+    "native_pq_operation": false,
+    "public_key_path": "attestations/v0.8.2/release-root-mldsa87.pub.pem",
+    "public_key_sha256": "ca74ba83611d2358efa2748f5945892069a55e2d3e1372ed53b5a1da5a851612",
+    "reference": "tpm2://prod3/release-root-mldsa87",
+    "tpm_pcr_policy": "sha256:7"
+  },
+  "verification": {
+    "prod3_unprivileged": "PASS",
+    "prod4_unprivileged": "PASS"
+  },
+  "version": "0.8.2"
+}
