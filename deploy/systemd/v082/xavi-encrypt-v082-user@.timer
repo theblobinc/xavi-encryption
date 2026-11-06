@@ -1,0 +1,12 @@
+[Unit]
+Description=Daily XAVI-DUO v0.8.2 NFS/SeaweedFS readback audit (%i)
+
+[Timer]
+Unit=xavi-encrypt-v082-user@%i.service
+OnCalendar=*-*-* 03:40:00
+RandomizedDelaySec=20m
+AccuracySec=5m
+Persistent=true
+
+[Install]
+WantedBy=timers.target
