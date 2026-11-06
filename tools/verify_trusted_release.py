@@ -95,11 +95,8 @@ def verify_with_policy(policy: dict, *, public_key: Path, manifest: Path, signat
     canonical_digest = digest(json.dumps(m, sort_keys=True, separators=(",", ":")).encode("utf-8"))
     if allowed.get(m["version"]) != canonical_digest:
         raise TrustError("release version or canonical manifest digest not authorized")
-    # The v0.8.2 library performs real post-quantum signature verification.
-    # Its immutable code/source must also be validated before installing this verifier.
-    source_root = Path(__file__).resolve().parents[1] / "v0.8.2"
-    if source_root.is_dir() and str(source_root) not in sys.path:
-        sys.path.insert(0, str(source_root))
+    # Verification uses the installed Python package, never a path injected
+    # from a caller-writable Git checkout.
     from xavi_duo_release import verify_manifest
     verified = verify_manifest(public_key, manifest, signature)
     if (verified.get("status") != "PASS" or verified.get("authority") is not False
@@ -112,6 +109,29 @@ def verify_with_policy(policy: dict, *, public_key: Path, manifest: Path, signat
             "cryptographic_verification": "PASS", "runtime_authority": False}
 
 
+def _root_owned_regular(path: Path) -> None:
+    path = path.resolve(strict=True)
+    if not path.is_file() or path.is_symlink():
+        raise TrustError("trusted executable must be regular")
+    parents = [path, *path.parents]
+    for item in parents:
+        st = item.lstat()
+        if st.st_uid != 0 or st.st_mode & 0o022:
+            raise TrustError("verifier runtime must be root-owned, without group/world write")
+
+
+def _check_runtime_integrity() -> None:
+    # Prevent a mutable Git checkout, user site-packages, or PYTHONPATH from
+    # becoming an implicit second trust root. Install the script and pinned
+    # v0.8.2 wheel into root-owned locations, invoke with Python -I.
+    import xavi_duo_release
+    _root_owned_regular(Path(__file__))
+    _root_owned_regular(Path(xavi_duo_release.__file__))
+    if Path(xavi_duo_release.__file__).resolve().is_relative_to(Path.cwd().resolve()):
+        # This check is intentionally conservative for repository invocations.
+        raise TrustError("cannot verify from developer working tree")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--public-key", type=Path, required=True)
@@ -119,6 +139,7 @@ def main() -> int:
     parser.add_argument("--signature", type=Path, required=True)
     args = parser.parse_args()
     try:
+        _check_runtime_integrity()
         policy = read_owner_policy()
         result = verify_with_policy(policy, public_key=args.public_key,
                                     manifest=args.manifest, signature=args.signature)
