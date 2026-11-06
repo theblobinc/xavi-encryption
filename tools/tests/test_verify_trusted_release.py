@@ -2,11 +2,14 @@
 import copy
 import importlib.util
 import json
+import sys
 from pathlib import Path
 import tempfile
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
+# Test-only import of the frozen standalone source tree; production CLI uses Python -I.
+sys.path.insert(0, str(ROOT / "v0.8.2"))
 MODPATH = ROOT / "tools" / "verify_trusted_release.py"
 SPEC = importlib.util.spec_from_file_location("xavi_release_trust_verifier_test", MODPATH)
 MOD = importlib.util.module_from_spec(SPEC)
