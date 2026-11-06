@@ -110,8 +110,10 @@ def verify_with_policy(policy: dict, *, public_key: Path, manifest: Path, signat
 
 
 def _root_owned_regular(path: Path) -> None:
+    if path.is_symlink():
+        raise TrustError("trusted runtime symlink forbidden")
     path = path.resolve(strict=True)
-    if not path.is_file() or path.is_symlink():
+    if not path.is_file():
         raise TrustError("trusted executable must be regular")
     parents = [path, *path.parents]
     for item in parents:
@@ -124,12 +126,16 @@ def _check_runtime_integrity() -> None:
     # Prevent a mutable Git checkout, user site-packages, or PYTHONPATH from
     # becoming an implicit second trust root. Install the script and pinned
     # v0.8.2 wheel into root-owned locations, invoke with Python -I.
-    import xavi_duo_release
+    import importlib.util
+    if not sys.flags.isolated:
+        raise TrustError("trusted verifier requires isolated Python (-I)")
     _root_owned_regular(Path(__file__))
-    _root_owned_regular(Path(xavi_duo_release.__file__))
-    if Path(xavi_duo_release.__file__).resolve().is_relative_to(Path.cwd().resolve()):
-        # This check is intentionally conservative for repository invocations.
-        raise TrustError("cannot verify from developer working tree")
+    spec = importlib.util.find_spec("xavi_duo_release")
+    if spec is None or not spec.origin:
+        raise TrustError("pinned crypto library not installed")
+    _root_owned_regular(Path(spec.origin))
+    if "/v0.8.2/" in str(Path(spec.origin).resolve()):
+        raise TrustError("cannot trust import from developer repository")
 
 
 def main() -> int:
