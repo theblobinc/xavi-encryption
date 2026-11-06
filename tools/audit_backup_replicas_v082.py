@@ -102,9 +102,23 @@ def deep_cms_check(cipher, cert, key):
     require(result.returncode == 0, "authenticated CMS decryption failed")
     return validate_custody_tar(result.stdout)
 
+def check_recipient_certificate_window(cert):
+    # Certificate expiry is an *operational rotation alarm*; an expired
+    # certificate does not automatically erase a decryption private key.
+    # Fail the scheduled check if expiry occurs within the next 60 days.
+    result = subprocess.run(
+        ["/usr/bin/openssl", "x509", "-in", str(cert),
+         "-checkend", str(60 * 24 * 60 * 60), "-noout"],
+        stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE, timeout=15, check=False)
+    require(result.returncode == 0, "backup recipient certificate expires within 60 days or is invalid")
+
+
 def check_recipient(cert_hash, checks, deep_cipher=None):
     directory_mode(RECIP, 0)
     file_hash(RECIP / "recipient.cert.pem", cert_hash, 0, modes=(0o644, 0o600,))
+    check_recipient_certificate_window(RECIP / "recipient.cert.pem")
+    checks.append("recipient_certificate_valid_more_than_60_days")
     # Public certificate is within a root-only directory; private key is never read by Python.
     key = RECIP / "recipient.key.pem"
     st = key.lstat()
