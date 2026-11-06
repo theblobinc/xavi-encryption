@@ -54,17 +54,25 @@ The custodian encrypted the five verified sealed/encrypted files **in memory as 
 - Authenticated CMS decryption on prod4 **PASS**. All five in-memory restored archive members matched the exact prod3 SHA-256 inventory. No decrypted archive was saved to disk.
 - This is an encrypted **off-node** backup, but **not off-site**: prod3's original physical TPM must still be available and satisfy its PCR policy to use the restored signing identity.
 
-### Return-copy checkpoint (not yet a complete restore)
+### Return-copy verification — complete on the original prod3 TPM
 
-Prod3 generated a one-time RSA recipient private key in its root-only recovery-test directory. Prod4 authenticated and decrypted its off-node archive, checked all five member digests, then immediately re-encrypted the in-memory tar for prod3 using AES-256-GCM and RSA-OAEP. The return ciphertext SHA-256 is `54e5471871ce503bf5e8a6345c9a2536fdbcdab7a6bcd6a7018b2c67d2cd02b3`. That **encrypted** file was transferred to prod3; its received digest matches.
+Prod3 generated a one-time RSA recipient private key in a root-only recovery-test directory. Prod4 authenticated and decrypted its off-node archive, checked all five member digests, then immediately re-encrypted the in-memory tar for prod3 using AES-256-GCM and RSA-OAEP. The return ciphertext SHA-256 is `54e5471871ce503bf5e8a6345c9a2536fdbcdab7a6bcd6a7018b2c67d2cd02b3`. That **encrypted** file was transferred to prod3; its received digest matches.
 
-The versioned, allowlisted restore validator `tools/offnode_return_restore_v082.py` compiles and is staged on this review branch. **Its privileged installation/execution was blocked before execution.** Therefore, the return archive has **not** yet been restored into a new test custody directory or used to perform a fresh TPM-backed signing operation. Do not claim that gate passed. The previously completed same-TPM local-restore sign/verify PASS is a different gate.
+The versioned allowlisted validator `tools/offnode_return_restore_v082.py` compiled and was installed under root-owned `/var/lib/xavi-duo/release-signer/bootstrap/` with mode `0500`. The installed SHA-256 was `f8d69059506cf2ab01dff31954b8bc4ee43061eed16455f43fe270ef6cb1ceb2`, identical to the source. Root OIDC approval then executed the script under isolated Python. It decrypted the returned CMS archive, verified the exact five root-owned sealed/encrypted objects against their pinned digests, and restored them **only** into the fresh directory:
 
-Before closing the return-copy gate, use the normal approved root execution path to run the pinned validator, verify the return-restored directory contains exactly the five root-owned `0600` files, sign the frozen v0.8.2 manifest through that *new* directory with the original prod3 TPM, and independently verify the signature. Then retire the short-lived return-recipient private key and destroy transient unprotected recovery material where applicable, retaining only bounded audit evidence.
+`/var/lib/xavi-duo/release-signer/recovery-tests/v082-offnode-return`
+
+Result: **`OFFNODE_RETURN_RESTORE=PASS files=5`**. No original/live custody files were overwritten.
+
+The prod3 TPM custody CLI used this **returned/restored** directory and the original physical TPM under `sha256:7` to sign the frozen v0.8.2 manifest; the authorization history reports completion with return code 0. The independently installed root-owned verifier then evaluated that new signature against the root-owned `/etc/xavi-encrypt/release-trust/v1.json` policy and returned **`TRUSTED_RELEASE_PASS`**, including the canonical v0.8.2 manifest hash and original ML-DSA-87 public-key ID. The signature grants **no** runtime authority.
+
+The prod3 root-only event receipt is at `/var/backups/xavi-duo/release-root-v082-20261106/OFFNODE-RETURN-RECEIPT.json`, SHA-256 `ebcf130a64aaa0ec36484ee9075d3560c4fc9e9e6e0413b65c603febcce6f895`. It binds the five files' SHA-256 values, both envelope SHA-256 values, the returned signature, and the trusted verification result. The one-time prod3 return-recipient private-key file was then unlinked by an audited root command; an independent root `stat` confirmed that path no longer exists. Unlinking a file does **not** guarantee forensic erasure of historical SSD blocks.
+
+**Boundary:** This demonstrates off-node backup integrity, authorized return transit, restore, same-TPM signing and trusted verification—not recovery after replacing or losing prod3's physical TPM, changing PCR7, or losing the prod4 decryption private key.
 
 ### Remaining dependencies
 
 1. Independent escrow/recovery for the prod4 backup recipient private key. Losing prod4 or that key makes the CMS archive unreadable even if prod3's TPM survives.
 2. Genuine off-site or independent-failure-domain storage and scheduled backup validation.
 3. A permanent-TPM-loss response requiring independently approved new signing-root enrollment, **not** attempting to export the original TPM-bound key. See `docs/release-root-rotation-runbook.md`.
-4. Final off-node **return-restored TPM signing** gate (pending as described above).
+4. Independent root-only receipt and verification on prod4 are desirable for mirrored audit custody; the prod3 receipt and prod4 authenticated decryption check are complete.
