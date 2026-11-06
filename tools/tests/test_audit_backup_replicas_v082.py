@@ -85,6 +85,19 @@ class BackupAuditTests(unittest.TestCase):
         with self.assertRaisesRegex(audit.AuditFailure,"ciphertext-only"):
             audit.check_prod3_seaweed(True,[])
 
+    def test_recipient_expiry_window_passes_when_certificate_is_current(self):
+        with mock.patch.object(audit.subprocess,"run",return_value=mock.Mock(returncode=0)) as run:
+            audit.check_recipient_certificate_window(Path("/public-certificate.pem"))
+        argv=run.call_args.args[0]
+        self.assertEqual(argv[:3],["/usr/bin/openssl","x509","-in"])
+        self.assertIn("-checkend",argv)
+        self.assertEqual(argv[argv.index("-checkend")+1],str(60*24*60*60))
+
+    def test_recipient_expiry_window_fails_closed(self):
+        with mock.patch.object(audit.subprocess,"run",return_value=mock.Mock(returncode=1)):
+            with self.assertRaisesRegex(audit.AuditFailure,"expires within 60 days"):
+                audit.check_recipient_certificate_window(Path("/public-certificate.pem"))
+
     def test_cli_disallows_unknown_profile(self):
         with self.assertRaises(SystemExit) as ctx:
             audit.main(["--profile","some-other-backup"])
