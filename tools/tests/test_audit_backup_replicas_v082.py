@@ -99,8 +99,10 @@ class BackupAuditTests(unittest.TestCase):
                 audit.check_recipient_certificate_window(Path("/public-certificate.pem"))
 
     def test_cli_disallows_unknown_profile(self):
-        with self.assertRaises(SystemExit) as ctx:
-            audit.main(["--profile","some-other-backup"])
+        # argparse's expected error is tested, not printed as a test failure.
+        with mock.patch("sys.stderr", io.StringIO()):
+            with self.assertRaises(SystemExit) as ctx:
+                audit.main(["--profile","some-other-backup"])
         self.assertEqual(ctx.exception.code,2)
 
 if __name__=="__main__":
