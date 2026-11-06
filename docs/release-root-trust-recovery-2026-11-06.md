@@ -76,3 +76,20 @@ The prod3 root-only event receipt is at `/var/backups/xavi-duo/release-root-v082
 2. Genuine off-site or independent-failure-domain storage and scheduled backup validation.
 3. A permanent-TPM-loss response requiring independently approved new signing-root enrollment, **not** attempting to export the original TPM-bound key. See `docs/release-root-rotation-runbook.md`.
 4. Independent root-only receipt and verification on prod4 are desirable for mirrored audit custody; the prod3 receipt and prod4 authenticated decryption check are complete.
+
+## Independent completion cross-check — 2026-11-06
+
+The return-restored directory was inspected again without replacing or deleting it. It contains exactly the five root-owned `0600` custody files, and `diff -qr` confirmed byte identity with the verified prod3 backup. The restored KEK status remained valid under `sha256:7`.
+
+An additional fresh test signature was created using **only** `/var/lib/xavi-duo/release-signer/recovery-tests/v082-offnode-return` as the custody root, output:
+
+`/var/lib/xavi-duo/release-signer/recovery-tests/v082-offnode-return.VERIFIED-DRILL-20261106.json`
+
+Its SHA-256 is `5d10aef52a1d005b4dbbe9865824ea749d2304999b10b02f6e1ac7709ff0c2bf`. The root-owned, isolated trust verifier returned `TRUSTED_RELEASE_PASS` for that exact test signature with signer public-key ID `ca74ba83611d2358efa2748f5945892069a55e2d3e1372ed53b5a1da5a851612`, release 0.8.2, `runtime_authority: false`. The OIDC command execution receipts for the fresh signing and trust verification are `afa1c53b59e96b5a1ddd77f17ea0c15689b2fafcaecac8d305bb67eb07141d5e` and `fa13a94d25756511a9a3840c4ab8d8d0e255665b3c1436db860d8f3101687a3a` respectively.
+
+Independent root-only audit receipts are preserved at:
+
+- Prod3 `/var/backups/xavi-duo/release-root-v082-20261106/OFFNODE-DRILL-RECEIPT.json`, SHA-256 `3a85237dca4c6a933a1c4bfc1735bd3170fceb0e203f1b076251cc904e5d6548`
+- Prod4 `/var/backups/xavi-encrypt/v0.8.2/OFFNODE-STORAGE-RECEIPT.json`, SHA-256 `c47e95f22c741105d9290e3e848264c27a09e1c021ef4efed7f709461198a1ec`
+
+The prod4 audit reauthenticated the stored AES-256-GCM CMS archive and checked all five original inventory hashes without saving plaintext files. The one-time return-recipient **private-key path is absent** on prod3 (root inventory shows only its public certificate); this does not imply physical forensic erasure. The original prod4 long-lived decryption private key remains root-owned on prod4 and still requires independently controlled escrow. This drill does not prove off-site survivability, recovery after loss of the original TPM, or PCR-7 reconfiguration.
