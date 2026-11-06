@@ -1,0 +1,12 @@
+[Unit]
+Description=Weekly XAVI-DUO v0.8.2 authenticated key-recipient recovery audit (%i)
+
+[Timer]
+Unit=xavi-encrypt-v082-deep@%i.service
+OnCalendar=Sun *-*-* 04:30:00
+RandomizedDelaySec=20m
+AccuracySec=5m
+Persistent=true
+
+[Install]
+WantedBy=timers.target
