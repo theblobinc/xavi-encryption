@@ -1,0 +1,19 @@
+[Unit]
+Description=XAVI-DUO v0.8.2 unprivileged local storage readback audit (%i)
+Documentation=https://github.com/theblobinc/xavi-encryption
+After=local-fs.target
+
+[Service]
+Type=oneshot
+User=tbi
+Group=tbi
+UMask=0077
+Environment=XDG_RUNTIME_DIR=/run/user/1000
+ExecStart=/usr/bin/python3 -I /usr/local/libexec/xavi-encrypt-v082-audit.py --profile %i
+TimeoutStartSec=100
+ProtectSystem=full
+ProtectHome=no
+StandardOutput=journal
+StandardError=journal
+# SeaweedFS uses an existing rootless Podman namespace and user runtime.
+# Do not restrict home/runtime or deny the setuid namespace helper here.
