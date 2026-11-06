@@ -134,8 +134,12 @@ def _check_runtime_integrity() -> None:
     if spec is None or not spec.origin:
         raise TrustError("pinned crypto library not installed")
     _root_owned_regular(Path(spec.origin))
-    if "/v0.8.2/" in str(Path(spec.origin).resolve()):
-        raise TrustError("cannot trust import from developer repository")
+    # The pinned v0.8.2 package lives *inside* the protected venv;
+    # its version string is not an indicator of an untrusted checkout.
+    installed_module = Path(spec.origin).resolve(strict=True)
+    interpreter_prefix = Path(sys.prefix).resolve(strict=True)
+    if not installed_module.is_relative_to(interpreter_prefix):
+        raise TrustError("crypto module is outside the protected Python environment")
 
 
 def main() -> int:
