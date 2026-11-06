@@ -93,3 +93,11 @@ Independent root-only audit receipts are preserved at:
 - Prod4 `/var/backups/xavi-encrypt/v0.8.2/OFFNODE-STORAGE-RECEIPT.json`, SHA-256 `c47e95f22c741105d9290e3e848264c27a09e1c021ef4efed7f709461198a1ec`
 
 The prod4 audit reauthenticated the stored AES-256-GCM CMS archive and checked all five original inventory hashes without saving plaintext files. The one-time return-recipient **private-key path is absent** on prod3 (root inventory shows only its public certificate); this does not imply physical forensic erasure. The original prod4 long-lived decryption private key remains root-owned on prod4 and still requires independently controlled escrow. This drill does not prove off-site survivability, recovery after loss of the original TPM, or PCR-7 reconfiguration.
+
+## Infrastructure requirement — no AWS
+
+The organization no longer uses AWS. **No AWS services, buckets, KMS keys, AWS fallback, or AWS credentials are permitted as dependencies for this backup/recovery design.** The existing prod4 CMS backup remains the verified on-premises copy; it is not an off-site backup.
+
+Any future off-site replica must use a separately identified and owner-approved **non-AWS destination** outside the prod3/prod4 physical failure domain (for example, a self-hosted SFTP target accessible over a narrowly scoped WireGuard link, or an independently operated non-AWS object-storage service). Encrypt before transfer, enforce key pinning and authentication, reject destination changes without approval, require immutable or versioned retention where supported, and verify returned ciphertext plus a complete recovery drill before claiming off-site readiness.
+
+Do not assume a configured off-site target exists. The recipient private key currently held by prod4 is a single point of failure; independently controlled escrow must be provisioned and tested with an authorized mechanism before claiming site-loss or recipient-host-loss survivability. Do **not** publish or replicate that private key to a Git repository or unapproved remote host. A copied TPM-sealed KEK remains unusable after losing prod3's original TPM.
