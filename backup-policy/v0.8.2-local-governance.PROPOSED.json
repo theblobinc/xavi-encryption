@@ -1,0 +1,78 @@
+{
+  "schema": "XAVI-ENCRYPT/LOCAL-BACKUP-GOVERNANCE/v1",
+  "release_version": "0.8.2",
+  "status": "proposed-review-control",
+  "authoritative_for_runtime_trust": false,
+  "runtime_authority": false,
+  "cloud_dependencies": [],
+  "aws_allowed": false,
+  "backup_immutability": "logical-frozen-digest-not-storage-WORM",
+  "retention": {
+    "frozen_version": "retain-until-independent-owner-approved-supersession",
+    "automatic_deletion": false,
+    "automatic_pruning": false,
+    "automatic_overwrite": false,
+    "emergency_auto_repair": false,
+    "manual_deletion_requires": [
+      "independently-approved-owner-retention-decision",
+      "verified-successor-backup-and-two-recipient-drill",
+      "protected-audit-evidence"
+    ]
+  },
+  "audits": {
+    "daily": [
+      "prod3-root",
+      "prod3-seaweed",
+      "prod4-root",
+      "prod4-user",
+      "vm1-root"
+    ],
+    "weekly_authenticated": [
+      "prod3-root",
+      "prod4-root",
+      "vm1-root"
+    ],
+    "certificate_rotation_warning_seconds": 5184000,
+    "logging": "per-host-systemd-journal",
+    "notification_integration": "not-configured",
+    "fast_checks_are_read_only": true,
+    "deep_checks_write_plaintext_custody_to_disk": false
+  },
+  "failure_domains": {
+    "hosts": [
+      "prod3",
+      "prod4",
+      "vm1"
+    ],
+    "offsite": false,
+    "seaweedfs_backing_host": "prod3",
+    "nfs_backing_host": "prod3",
+    "vm1_local_copy_independent_of_prod3_nfs": true
+  },
+  "recipient_envelopes": [
+    {
+      "recipient": "prod4",
+      "sha256": "ccd1438917fba5f108fb3d6f7e8facc9f190b7acb3c2f56f086e6f751fa6b41d",
+      "verified": true
+    },
+    {
+      "recipient": "vm1",
+      "sha256": "da336ca348b41e64d3c2afbe809b43102b0e85dff4ee2faed9c956cfa0d0c511",
+      "verified": true
+    }
+  ],
+  "tpm": {
+    "original_host": "prod3",
+    "required_pcr": "sha256:7",
+    "different_tpm_unseal_supported": false,
+    "replacement_signer_requires_independent_owner_trust_approval": true
+  },
+  "recipient_rotation": {
+    "automatic_rotation": false,
+    "generates_new_private_key_on_independent_recipient_host": true,
+    "dual_envelope_overlap_required": true,
+    "readback_and_deep_authentication_before_activation": true,
+    "fresh_return_to_original_tpm_signing_drill_required": true,
+    "retire_old_recipient_only_after_owner_approval": true
+  }
+}

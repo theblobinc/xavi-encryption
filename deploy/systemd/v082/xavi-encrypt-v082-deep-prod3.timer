@@ -1,0 +1,12 @@
+[Unit]
+Description=Weekly XAVI-DUO v0.8.2 prod3 protected release verification
+
+[Timer]
+Unit=xavi-encrypt-v082-deep-prod3.service
+OnCalendar=Sun *-*-* 04:30:00
+RandomizedDelaySec=20m
+AccuracySec=5m
+Persistent=true
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,24 @@
+{
+  "schema": "XAVI-ENCRYPT/RELEASE-TRUST-POLICY/v1",
+  "policy_id": "theblobinc-xavi-encrypt-release-root-2026-11",
+  "organization": "The Blob Inc.",
+  "status": "active",
+  "purpose": "release-manifest-verification-only",
+  "runtime_authority": false,
+  "signer": {
+    "algorithm": "ML-DSA-87",
+    "key_id": "sha256:ca74ba83611d2358efa2748f5945892069a55e2d3e1372ed53b5a1da5a851612",
+    "custody_reference": "tpm2://prod3/release-root-mldsa87",
+    "pcr_policy": "sha256:7",
+    "native_pq_operation": false
+  },
+  "allowed_manifests": {
+    "0.8.2": "sha256:afecddbe0941794be169e9a097ced7640e5432830d97ab2648f9a1d02bc92f26"
+  },
+  "registration": {
+    "requested_on": "2026-11-06",
+    "basis": "explicit owner instruction; requires separately approved, root-owned installation",
+    "trust_bootstrap": "/etc/xavi-encrypt/release-trust/v1.json; repository copy is nonauthoritative",
+    "backing": "TPM2-sealed KEK; ML-DSA performed by pinned OpenSSL provider"
+  }
+}
