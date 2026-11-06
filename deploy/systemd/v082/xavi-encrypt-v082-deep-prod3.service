@@ -1,0 +1,20 @@
+[Unit]
+Description=XAVI-DUO v0.8.2 prod3 TPM-release trust audit (OCI verifier)
+Documentation=https://github.com/theblobinc/xavi-encryption
+After=local-fs.target
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+UMask=0077
+ExecStart=/usr/bin/python3 -I /usr/local/libexec/xavi-encrypt-v082-audit.py --profile prod3-root --deep
+TimeoutStartSec=180
+ProtectSystem=full
+ProtectHome=no
+PrivateTmp=no
+# The pinned release verifier starts the approved OCI OpenSSL provider.
+# Keep the ordinary root OCI execution environment for this one profile;
+# the generic CMS-only deep profile retains strict sandboxing on prod4/vm1.
+StandardOutput=journal
+StandardError=journal
