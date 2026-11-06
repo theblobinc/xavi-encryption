@@ -72,10 +72,10 @@ The prod3 root-only event receipt is at `/var/backups/xavi-duo/release-root-v082
 
 ### Remaining dependencies
 
-1. Independent escrow/recovery for the prod4 backup recipient private key. Losing prod4 or that key makes the CMS archive unreadable even if prod3's TPM survives.
+1. Independent long-term escrow/rotation governance for both prod4 and vm1 recipient private keys. The **original prod4-recipient envelope** still requires prod4's key, while a **separately proven vm1-recipient envelope** provides a distinct decryption path. Losing both recipients still makes the archives unavailable.
 2. Genuine off-site or independent-failure-domain storage and scheduled backup validation.
 3. A permanent-TPM-loss response requiring independently approved new signing-root enrollment, **not** attempting to export the original TPM-bound key. See `docs/release-root-rotation-runbook.md`.
-4. Independent root-only receipt and verification on prod4 are desirable for mirrored audit custody; the prod3 receipt and prod4 authenticated decryption check are complete.
+4. Original prod4 and independent vm1 CMS envelopes each have protected verification receipts; maintain those receipts and enforce independent backup-key governance.
 
 ## Independent completion cross-check — 2026-11-06
 
@@ -100,4 +100,18 @@ The organization no longer uses AWS. **No AWS services, buckets, KMS keys, AWS f
 
 Any future off-site replica must use a separately identified and owner-approved **non-AWS destination** outside the prod3/prod4 physical failure domain (for example, a self-hosted SFTP target accessible over a narrowly scoped WireGuard link, or an independently operated non-AWS object-storage service). Encrypt before transfer, enforce key pinning and authentication, reject destination changes without approval, require immutable or versioned retention where supported, and verify returned ciphertext plus a complete recovery drill before claiming off-site readiness.
 
-Do not assume a configured off-site target exists. The recipient private key currently held by prod4 is a single point of failure; independently controlled escrow must be provisioned and tested with an authorized mechanism before claiming site-loss or recipient-host-loss survivability. Do **not** publish or replicate that private key to a Git repository or unapproved remote host. A copied TPM-sealed KEK remains unusable after losing prod3's original TPM.
+Do not assume a configured off-site target exists. Distinct prod4 and vm1 recipient private keys now exist and each has a separately verified CMS envelope; losing prod4 alone no longer destroys all decryption capability. Independent escrow or an owner-approved survivability mechanism is still required before claiming recovery from losing both recipient hosts or the entire site. Do **not** publish or replicate that private key to a Git repository or unapproved remote host. A copied TPM-sealed KEK remains unusable after losing prod3's original TPM.
+
+## Independent vm1 decryption and full return-to-original-TPM gate — 2026-11-06
+
+The prod4-to-prod3 return gate documented above was independently repeated from a **different encryption recipient and storage host**: vm1.
+
+1. Root-only, separately generated **vm1 RSA-3072 CMS recipient**: public certificate SHA-256 `5f98e6ea8c65fef92080783f317b0003e0a0cdddc17759edf40764090caf7b02`. The private key remained on vm1.
+2. The five sealed custody objects were authenticated and re-encrypted into the **vm1-specific AES-256-GCM/RSA-OAEP envelope**, SHA-256 `da336ca348b41e64d3c2afbe809b43102b0e85dff4ee2faed9c956cfa0d0c511`. A root-owned copy is held on vm1. vm1 independently decrypted it, verified 5/5 inventory digests, rejected the old prod4-recipient ciphertext with the wrong recipient key, and rejected tampered vm1 ciphertext. vm1 protected receipt SHA-256: `b9de1090dcbea31ed38c3141b6f7cac193aae4f22cf0cefd5f51a3e947efb47b`.
+3. A new, one-time **prod3 public recovery certificate** (SHA-256 `a4976bca65b5372beeeb909ed1f1e537c69e678329adc9ba05440f415be56276`) was transferred to vm1. Its private key was **not** sent. vm1 authenticated its archive and re-encrypted it in memory to this recipient, resulting in CMS SHA-256 `e95d52dfcddc77e64d5562afaa3d851fcba7d91afe09abc9dc63c2cb02f12261`.
+4. prod3 verified return-ciphertext SHA-256, authenticated CMS decryption, exact five-member allowlist, and root-only file/directory metadata; `tools/vm1_return_restore_v082.py` restored only to `/var/lib/xavi-duo/release-signer/recovery-tests/v082-vm1-return`. A root-owned `diff -qr` against the original custody inventory returned **RC 0** (byte-identical).
+5. A fresh signature created with that restored custody directory and the **original physical prod3 TPM, PCR sha256:7**, independently returned **`TRUSTED_RELEASE_PASS`** under the root-owned release-only policy. New signature SHA-256 `17c012770f604b3f0affde013b5f2608596cbce9944f75aa8c31ee8fc3a20df8`, signer ID `sha256:ca74ba83611d2358efa2748f5945892069a55e2d3e1372ed53b5a1da5a851612`, canonical manifest `sha256:afecddbe0941794be169e9a097ced7640e5432830d97ab2648f9a1d02bc92f26`, `runtime_authority: false`.
+6. `tools/record_vm1_return_drill_v082.py` repeated the protected trust check and wrote an exclusive root-only prod3 audit receipt `/var/backups/xavi-duo/release-root-v082-20261106/VM1-RETURN-DRILL-RECEIPT.json`, SHA-256 `bb4ab9f6873d3ccc711f7f0ddd1296130c0fc87f1827ad99ea09c580b2ffd4cf`.
+7. Transient ordinary-user ciphertext transfer files were removed. **The one-time prod3 return private-key path remains present and mode `0600`: its retirement attempt was blocked before execution.** Do not infer secure erasure or claim key retirement. It must be retired through the normal approved root administrative path when available; this is a separate cleanup state.
+
+These gates prove a full **vm1 decryption → encrypted return → original prod3 TPM signing → organizational trusted verification** without depending on prod4's decryption private key. The live trust policy, original release manifest, detached release signature, and frozen v0.8.2 tag were not modified. **This is not cross-TPM recovery, off-site recovery, an independently trusted replacement signing root, or runtime execution authority.**
